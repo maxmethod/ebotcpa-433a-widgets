@@ -1,0 +1,16 @@
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Node (in case we add tooling later)
+node_modules/
+
+# Local dev conveniences
+.env
+.env.local
+*.log
+
+# Preview server artifacts
+.claude/

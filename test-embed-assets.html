@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Embed Test — 433-A Assets Repeaters (GHL Form Simulation)</title>
+<style>
+  body { font-family: sans-serif; margin: 0; padding: 0; background: #f3f0f9; }
+  .fake-funnel-nav { background: #1A2744; color: #fff; padding: 16px; text-align: center; font-weight: 600; }
+  .fake-ghl-form { max-width: 820px; margin: 20px auto; padding: 20px; border: 2px dashed #888; background: #fff; border-radius: 12px; }
+  .fake-ghl-form h3 { margin-top: 0; color: #666; font-size: 14px; }
+  .host-fields { margin-top: 18px; }
+  /* Simulate the real GHL custom-field wrappers so the widget's hide logic runs. */
+  .form-field-wrap { margin: 10px 0; }
+  .form-field-wrap label { display:block; font-size:12px; color:#888; margin-bottom:4px; }
+  .form-field-wrap textarea { width:100%; min-height:54px; font-family:monospace; font-size:12px; }
+</style>
+</head>
+<body>
+<div class="fake-funnel-nav">FAKE GHL FORM HEADER — ebotCPA 433-A · Assets step</div>
+
+<!-- In GHL: data-primary-color="{{custom_values.brand_primary_color}}".
+     Here we hardcode the ebotCPA navy to simulate a resolved brand color. -->
+<div id="assets-433a-widget" data-primary-color="#1A2744"></div>
+
+<div class="fake-ghl-form">
+  <form id="ghl-form" onsubmit="event.preventDefault(); alert(
+    'bank_accounts_summary:\n' + this['433a__bank_accounts_summary'].value +
+    '\n\nvehicles_summary:\n' + this['433a__vehicles_summary'].value
+  );">
+    <h3>↓ SIMULATED GHL CUSTOM FIELDS (the widget hides + drives these) ↓</h3>
+    <div class="host-fields">
+      <!-- Real GHL renders these as textareas with name / data-q = the field clean key.
+           The widget finds them, hides their wrapper, and writes the summaries in. -->
+      <div class="form-field-wrap">
+        <label>433A - Bank Accounts Summary</label>
+        <textarea name="433a__bank_accounts_summary" data-q="433a__bank_accounts_summary"></textarea>
+      </div>
+      <div class="form-field-wrap">
+        <label>433A - Vehicles Summary</label>
+        <textarea name="433a__vehicles_summary" data-q="433a__vehicles_summary"></textarea>
+      </div>
+    </div>
+    <button type="submit" style="padding: 12px 24px; background: #1A2744; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;">Continue → (GHL form submit)</button>
+  </form>
+</div>
+
+<script src="./dist/embed-assets.js"></script>
+</body>
+</html>
