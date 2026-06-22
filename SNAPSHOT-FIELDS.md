@@ -10,10 +10,18 @@ For the assets widget to render and save, the GHL account (sub-account or snapsh
 
 ## Custom fields (required — already created for ebotCPA)
 
-| Field name | Clean key | Type | Field ID (ebotCPA) |
-| --- | --- | --- | --- |
-| 433A - Bank Accounts Summary | `433a__bank_accounts_summary` | LARGE_TEXT | `SLdP6JMDArIVsH1BzS4U` |
-| 433A - Vehicles Summary | `433a__vehicles_summary` | LARGE_TEXT | `3WLe3j6kPEC9W9lJqVLC` |
+All are **LARGE_TEXT** on the **contact** object.
+
+| Field name | Clean key | Field ID (ebotCPA) |
+| --- | --- | --- |
+| 433A - Bank Accounts Summary | `433a__bank_accounts_summary` | `SLdP6JMDArIVsH1BzS4U` |
+| 433A - Investments Summary | `433a__investments_summary` | `9JjOHb32stOg2zCvov4I` |
+| 433A - Digital Assets Summary | `433a__digital_assets_summary` | `3U5eEC5JOMX6ntFeJbD3` |
+| 433A - Available Credit Summary | `433a__available_credit_summary` | `QnIPB4NvDBxIv93lih9u` |
+| 433A - Life Insurance Summary | `433a__life_insurance_summary` | `kkCR13vK8bT8pfA7tAxl` |
+| 433A - Real Property Summary | `433a__real_property_summary` | `WD5dZRBhDV5NXF2txPrn` |
+| 433A - Vehicles Summary | `433a__vehicles_summary` | `3WLe3j6kPEC9W9lJqVLC` |
+| 433A - Personal Assets Summary | `433a__personal_assets_summary` | `vtTHUfgmQIxyzKUigu6L` |
 
 > The field IDs are informational only — the widget never uses them. It writes by clean key so the same build is portable to any account that has fields with these keys.
 

@@ -8,23 +8,33 @@ Client-side widgets for the **ebotCPA IRS Form 433-A intake** (GoHighLevel). Eac
 
 ## Widgets
 
-Two **independent** widgets — each goes on its **own page** (separate container id / config global / load guard, so they never collide):
+**Independent** repeater widgets covering Form 433-A (Rev. 6-2026) **Section 4 — Personal Asset Information**. Each goes on its **own page** (separate container id / config global / load guard, so they never collide). Headers/labels match the IRS form.
 
-| Widget | Source | Embed | Container id | Writes (clean key) |
-| --- | --- | --- | --- | --- |
-| **Bank Accounts** | `bank-accounts.html` | `dist/embed-bank-accounts.js` | `bank-433a-widget` | `433a__bank_accounts_summary` |
-| **Vehicles** | `vehicles.html` | `dist/embed-vehicles.js` | `vehicle-433a-widget` | `433a__vehicles_summary` |
+| 433-A line | Widget | Source | Embed | Container id | Writes (clean keys) |
+| --- | --- | --- | --- | --- | --- |
+| 13 | **Bank Accounts** | `bank-accounts.html` | `dist/embed-bank-accounts.js` | `bank-433a-widget` | `433a__bank_accounts_summary` |
+| 14 | **Investments** | `investments.html` | `dist/embed-investments.js` | `investments-433a-widget` | `433a__investments_summary` |
+| 15 | **Digital Assets** | `digital-assets.html` | `dist/embed-digital-assets.js` | `digital-assets-433a-widget` | `433a__digital_assets_summary` |
+| 16 & 17 | **Available Credit + Life Insurance** | `available-credit.html` | `dist/embed-available-credit.js` | `credit-433a-widget` | `433a__available_credit_summary` · `433a__life_insurance_summary` |
+| 18 | **Real Property** | `real-property.html` | `dist/embed-real-property.js` | `real-property-433a-widget` | `433a__real_property_summary` |
+| 19 | **Vehicles** | `vehicles.html` | `dist/embed-vehicles.js` | `vehicle-433a-widget` | `433a__vehicles_summary` |
+| 20 | **Personal Assets** | `personal-assets.html` | `dist/embed-personal-assets.js` | `personal-assets-433a-widget` | `433a__personal_assets_summary` |
 
-Each adds rows the client can add/remove, then serializes them into the matching LARGE_TEXT field in the **same pipe format the existing 433-A webhook/PDF use**:
+Each adds rows the client can add/remove, then serializes them into the matching LARGE_TEXT field as a pipe summary, with auto-calculated equity/available columns and a running total appended:
 
 ```
-Bank:     Wells Fargo | Checking | $2,500
-Vehicle:  2019 Ford F-150 | Value: $28,000 | Loan: $15,500.50
+Bank:        Wells Fargo | Checking | $2,500
+Investment:  401(k) | Company: Fidelity | Value: $85,000 | Loan: $10,000 | Equity: $75,000
+             — Total equity (value − loans): $75,000
 ```
 
-Put each widget on the page that holds its LARGE_TEXT field; the widget auto-hides that field's raw textarea and drives it, so the client only sees the repeater.
+Put each widget on the page that holds its LARGE_TEXT field(s); the widget auto-hides those raw textareas and drives them, so the client only sees the repeater.
 
-> **Legacy:** `assets-repeater.html` → `dist/embed-assets.js` (container `assets-433a-widget`) is the original *combined* widget with **both** repeaters in one block. Kept for backward-compat; new work uses the two split widgets above.
+### Config-driven engine
+
+`investments.html` is the **canonical engine** — a pure-data, multi-section repeater. The Section-4 asset widgets (`digital-assets`, `available-credit`, `real-property`, `personal-assets`) are **generated** from it by `scripts/gen-asset-widgets.js`, which swaps only the `CONFIG` object (columns, headers, field keys, auto-calc rules). To change the engine: edit `investments.html`, run `node scripts/gen-asset-widgets.js`, then `node scripts/build-embed.js`. `bank-accounts.html` / `vehicles.html` are the earlier standalone (pre-engine) widgets and are maintained directly.
+
+> **Legacy:** `assets-repeater.html` → `dist/embed-assets.js` (container `assets-433a-widget`) is the original *combined* bank+vehicles block. Kept for backward-compat.
 
 ## Brand color — driven by a GHL custom value
 

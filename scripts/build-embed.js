@@ -19,6 +19,52 @@ const CDN_REPO = 'maxmethod/ebotcpa-433a-widgets';
 // One entry per widget. scope/containerId/guard/configGlobal must be unique so
 // multiple embeds can coexist on the same GHL page without colliding.
 const WIDGETS = {
+  // Section 4 asset repeaters (config-driven engine) — each on its own page.
+  investments: {
+    input: 'investments.html',
+    output: 'dist/embed-investments.js',
+    containerId: 'investments-433a-widget',
+    dataAttr: 'data-investments-433a-widget',
+    styleAttr: 'data-investments-433a',
+    guard: '__investments433aEmbedLoaded',
+    label: 'investments'
+  },
+  digitalAssets: {
+    input: 'digital-assets.html',
+    output: 'dist/embed-digital-assets.js',
+    containerId: 'digital-assets-433a-widget',
+    dataAttr: 'data-digital-assets-433a-widget',
+    styleAttr: 'data-digital-assets-433a',
+    guard: '__digital433aEmbedLoaded',
+    label: 'digital-assets'
+  },
+  availableCredit: {
+    input: 'available-credit.html',
+    output: 'dist/embed-available-credit.js',
+    containerId: 'credit-433a-widget',
+    dataAttr: 'data-credit-433a-widget',
+    styleAttr: 'data-credit-433a',
+    guard: '__credit433aEmbedLoaded',
+    label: 'available-credit'
+  },
+  realProperty: {
+    input: 'real-property.html',
+    output: 'dist/embed-real-property.js',
+    containerId: 'real-property-433a-widget',
+    dataAttr: 'data-real-property-433a-widget',
+    styleAttr: 'data-real-property-433a',
+    guard: '__realprop433aEmbedLoaded',
+    label: 'real-property'
+  },
+  personalAssets: {
+    input: 'personal-assets.html',
+    output: 'dist/embed-personal-assets.js',
+    containerId: 'personal-assets-433a-widget',
+    dataAttr: 'data-personal-assets-433a-widget',
+    styleAttr: 'data-personal-assets-433a',
+    guard: '__personal433aEmbedLoaded',
+    label: 'personal-assets'
+  },
   // Split widgets — each goes on its OWN page. These are the recommended embeds.
   bank: {
     input: 'bank-accounts.html',
