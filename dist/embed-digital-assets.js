@@ -100,6 +100,13 @@
             "slabel": "Location"
           },
           {
+            "id": "amount",
+            "label": "Amount held (units)",
+            "kind": "text",
+            "ph": "e.g. 0.5 BTC, 12 ETH",
+            "slabel": "Amount"
+          },
+          {
             "id": "value",
             "label": "Value (USD)",
             "kind": "money",
@@ -126,8 +133,23 @@
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; });
   }
-  function parseMoney(s) { if (s == null || String(s).trim() === '') return null; var n = Number(String(s).replace(/[^0-9.\-]/g, '')); return isFinite(n) ? n : null; }
-  function fmtMoney(n) { var v = Number(n) || 0; var hasCents = Math.round(v * 100) % 100 !== 0; return '$' + v.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 }); }
+  function parseMoney(s) {
+    if (s == null) return null;
+    var t = String(s).trim();
+    if (t === '') return null;
+    var neg = /^\(.*\)$/.test(t) || /^-/.test(t);  // accounting parens or leading minus = negative
+    var str = t.replace(/[^0-9.]/g, '');           // keep digits + dot only ($ , ( ) - letters dropped)
+    if (!/^\d*\.?\d+$/.test(str)) return null;      // non-numeric / garbage -> null (raw text is preserved by money())
+    var n = Number(str);
+    if (!isFinite(n)) return null;
+    return neg ? -n : n;
+  }
+  function fmtMoney(n) {
+    var v = Number(n) || 0, neg = v < 0, abs = Math.abs(v);
+    var hasCents = Math.round(abs * 100) % 100 !== 0;
+    var s = '$' + abs.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 });
+    return neg ? '(' + s + ')' : s;  // negatives in accounting parentheses
+  }
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
@@ -273,16 +295,39 @@
     widgetEl.style.setProperty('--ar-accent-hover', darken(color, 0.14));
   }
 
+  // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
+  // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
+  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function reconcileFallbacks() {
+    CONFIG.sections.forEach(function (sec) {
+      var real = realHost(sec.key);
+      var fb = mount.querySelector('input[data-ar-fallback="1"][name="' + sec.key + '"]');
+      if (real && fb) { fb.parentNode.removeChild(fb); setAll(sec.key, buildSummary(sec)); } // host appeared late -> drop the dup, sync the real field
+      else if (!real && !fb) { var hi = document.createElement('input'); hi.type = 'hidden'; hi.setAttribute('name', sec.key); hi.setAttribute('data-ar-fallback', '1'); mount.appendChild(hi); }
+    });
+  }
+
+  // ---------- commit an in-progress add-box row before the form advances/submits ----------
+  function flushPending() {
+    CONFIG.sections.forEach(function (sec) {
+      var gateCol = sec.columns.filter(function (c) { return c.gate; })[0] || sec.columns[0];
+      var gi = sec._els && sec._els.inputs[gateCol.id];
+      if (gi && gi.value.trim()) { var b = sec._els.box.querySelector('[data-act="add"]'); if (b) b.click(); }
+    });
+  }
+  document.addEventListener('submit', flushPending, true);
+  document.addEventListener('click', function (e) {
+    var t = e.target && e.target.closest && e.target.closest('.ghl-footer-next, .ghl-submit-btn, .ghl-footer-submit, button[type="submit"]');
+    if (t) flushPending();
+  }, true);
+
   // ---------- boot ----------
   CONFIG.sections.forEach(buildSection);
-  // fallback hidden inputs so the widget syncs in standalone preview
-  CONFIG.sections.forEach(function (sec) {
-    var hi = document.createElement('input'); hi.type = 'hidden'; hi.setAttribute('name', sec.key); hi.setAttribute('data-ar-fallback', '1'); mount.appendChild(hi);
-  });
+  reconcileFallbacks();
   applyPrimaryColor();
   hideHostFields();
   var tries = 0;
-  var timer = setInterval(function () { tries++; applyPrimaryColor(); hideHostFields(); if (tries > 40) clearInterval(timer); }, 300);
+  var timer = setInterval(function () { tries++; applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
 })();
   })();
 })();

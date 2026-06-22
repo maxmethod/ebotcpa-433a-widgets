@@ -18,6 +18,7 @@ const WIDGETS = {
           { id: 'name', label: 'Name (wallet / exchange / DCE)', kind: 'text', ph: 'e.g. Coinbase, Ledger', slabel: 'Name', role: 'meta' },
           { id: 'email', label: 'Email used to set up', kind: 'text', ph: 'email@example.com', slabel: 'Email' },
           { id: 'location', label: 'Location of asset', kind: 'text', ph: 'Mobile wallet, Online, Hardware', slabel: 'Location' },
+          { id: 'amount', label: 'Amount held (units)', kind: 'text', ph: 'e.g. 0.5 BTC, 12 ETH', slabel: 'Amount' },
           { id: 'value', label: 'Value (USD)', kind: 'money', slabel: 'Value', role: 'amount' }
         ]
       }]
