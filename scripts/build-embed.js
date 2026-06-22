@@ -19,6 +19,27 @@ const CDN_REPO = 'maxmethod/ebotcpa-433a-widgets';
 // One entry per widget. scope/containerId/guard/configGlobal must be unique so
 // multiple embeds can coexist on the same GHL page without colliding.
 const WIDGETS = {
+  // Split widgets — each goes on its OWN page. These are the recommended embeds.
+  bank: {
+    input: 'bank-accounts.html',
+    output: 'dist/embed-bank-accounts.js',
+    containerId: 'bank-433a-widget',
+    dataAttr: 'data-bank-433a-widget',
+    styleAttr: 'data-bank-433a',
+    guard: '__bank433aEmbedLoaded',
+    label: 'bank-accounts'
+  },
+  vehicles: {
+    input: 'vehicles.html',
+    output: 'dist/embed-vehicles.js',
+    containerId: 'vehicle-433a-widget',
+    dataAttr: 'data-vehicle-433a-widget',
+    styleAttr: 'data-vehicle-433a',
+    guard: '__vehicle433aEmbedLoaded',
+    label: 'vehicles'
+  },
+  // Legacy combined widget (bank + vehicles in one block). Kept for backward compat
+  // with any v1.0.0 embed; new work should use the two split widgets above.
   assets: {
     input: 'assets-repeater.html',
     output: 'dist/embed-assets.js',
