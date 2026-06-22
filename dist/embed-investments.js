@@ -72,7 +72,7 @@
           { id: 'phone',   label: 'Company phone',           kind: 'text',  ph: '(000) 000-0000', slabel: 'Phone' },
           { id: 'value',   label: 'Current value',           kind: 'money', slabel: 'Value' },
           { id: 'loan',    label: 'Loan balance (if any)',   kind: 'money', slabel: 'Loan' },
-          { id: 'equity',  label: 'Equity',                  kind: 'calc',  sub: ['value', 'loan'], slabel: 'Equity', role: 'amount' }
+          { id: 'equity',  label: 'Equity',                  kind: 'calc',  sub: ['value', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
         ]
       }
     ]
@@ -123,7 +123,7 @@
 
   function col(sec, id) { for (var i = 0; i < sec.columns.length; i++) if (sec.columns[i].id === id) return sec.columns[i]; return null; }
   function roleCol(sec, role) { for (var i = 0; i < sec.columns.length; i++) if (sec.columns[i].role === role) return sec.columns[i]; return null; }
-  function calcVal(c, row) { return num(row[c.sub[0]]) - num(row[c.sub[1]]); }
+  function calcVal(c, row) { var v = num(row[c.sub[0]]) - num(row[c.sub[1]]); return c.floor ? Math.max(0, v) : v; } // floor:true clamps underwater equity to $0 (IRS OIC convention)
   function totalOf(sec) {
     var tc = col(sec, sec.totalCol);
     return sec._state.reduce(function (s, row) { return s + (tc.kind === 'calc' ? calcVal(tc, row) : num(row[tc.id])); }, 0);

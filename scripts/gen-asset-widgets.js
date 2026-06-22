@@ -53,7 +53,7 @@ const WIDGETS = {
             { id: 'owner', label: 'Owner of policy', kind: 'text', ph: 'Name', slabel: 'Owner', role: 'meta' },
             { id: 'cashvalue', label: 'Current cash value', kind: 'money', slabel: 'Cash value' },
             { id: 'loanbal', label: 'Outstanding loan balance', kind: 'money', slabel: 'Loan' },
-            { id: 'availcash', label: 'Available cash', kind: 'calc', sub: ['cashvalue', 'loanbal'], slabel: 'Available cash', role: 'amount' }
+            { id: 'availcash', label: 'Available cash', kind: 'calc', sub: ['cashvalue', 'loanbal'], floor: true, slabel: 'Available cash', role: 'amount' }
           ]
         }
       ]
@@ -78,7 +78,7 @@ const WIDGETS = {
           { id: 'loan', label: 'Current loan balance', kind: 'money', slabel: 'Loan' },
           { id: 'payment', label: 'Amount of monthly payment', kind: 'money', slabel: 'Monthly' },
           { id: 'finalpayment', label: 'Date of final payment', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'Final pmt' },
-          { id: 'equity', label: 'Equity', kind: 'calc', sub: ['fmv', 'loan'], slabel: 'Equity', role: 'amount' }
+          { id: 'equity', label: 'Equity', kind: 'calc', sub: ['fmv', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
         ]
       }]
     }
@@ -101,7 +101,7 @@ const WIDGETS = {
           { id: 'loan', label: 'Current loan balance', kind: 'money', slabel: 'Loan' },
           { id: 'payment', label: 'Amount of monthly payment', kind: 'money', slabel: 'Monthly' },
           { id: 'finalpayment', label: 'Date of final payment', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'Final pmt' },
-          { id: 'equity', label: 'Equity', kind: 'calc', sub: ['fmv', 'loan'], slabel: 'Equity', role: 'amount' }
+          { id: 'equity', label: 'Equity', kind: 'calc', sub: ['fmv', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
         ]
       }]
     }
