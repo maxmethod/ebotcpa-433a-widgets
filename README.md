@@ -30,6 +30,14 @@ Investment:  401(k) | Company: Fidelity | Value: $85,000 | Loan: $10,000 | Equit
 
 Put each widget on the page that holds its LARGE_TEXT field(s); the widget auto-hides those raw textareas and drives them, so the client only sees the repeater.
 
+### Unified bundle (recommended · true paste-once)
+
+`dist/embed-433a.js` bundles **all 7 repeaters + the income/expense calc** into one script. Paste that single `<script>` **once**, anywhere on the survey — **no mount `<div>`s needed.** Each repeater finds its native LARGE_TEXT field by clean key and renders itself right there (the field is auto-hidden + driven); the calc finds its total fields and injects its card. You only need the native fields on their steps. See `GHL-EMBED-SNIPPETS.html` (Option A).
+
+- **Field-anchoring** also makes the `<div>` optional for the *individual* embeds: omit it and the embed mounts next to its native field; include it (back-compat) and it mounts there. Placement is durable via a `MutationObserver` — it works even if GHL mounts a later step's fields long after load.
+- A widget with **multiple sections** (Credit + Life Insurance) renders them together and hides every host field, so keep all of its fields on **one** survey step (the engine logs a console warning otherwise).
+- The income/expense calc (`income-expense-calc.html` → `dist/embed-income-expense-calc.js`) is a **verbatim snapshot** of the calc owned by a separate session — re-sync that file if the source changes (don't edit it here).
+
 ### Config-driven engine
 
 `investments.html` is the **canonical engine** — a pure-data, multi-section repeater. The Section-4 asset widgets (`digital-assets`, `available-credit`, `real-property`, `personal-assets`) are **generated** from it by `scripts/gen-asset-widgets.js`, which swaps only the `CONFIG` object (columns, headers, field keys, auto-calc rules). To change the engine: edit `investments.html`, run `node scripts/gen-asset-widgets.js`, then `node scripts/build-embed.js`. `bank-accounts.html` / `vehicles.html` are the earlier standalone (pre-engine) widgets and are maintained directly.
@@ -49,16 +57,21 @@ Unresolved `{{...}}` merge tags are ignored, so an account without the custom va
 
 ## GHL embed snippets
 
-Paste each into a Custom Code / HTML block on its page. Ready-to-paste copies in `GHL-EMBED-SNIPPETS.html`.
+Ready-to-paste copies in `GHL-EMBED-SNIPPETS.html`.
+
+**Option A — unified bundle (recommended, paste-once, no divs):**
 
 ```html
-<!-- Bank Accounts (its own page) -->
+<!-- Paste ONCE, anywhere on the survey. Just have the native fields on their steps. -->
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@vX.Y.Z/dist/embed-433a.js"></script>
+```
+
+**Option B — individual per-step embeds (the `<div>` is now optional):**
+
+```html
+<!-- Bank Accounts (its own page; omit the <div> to field-anchor to the native field) -->
 <div id="bank-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
 <script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@vX.Y.Z/dist/embed-bank-accounts.js"></script>
-
-<!-- Vehicles (its own page) -->
-<div id="vehicle-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@vX.Y.Z/dist/embed-vehicles.js"></script>
 ```
 
 > Pin `@vX.Y.Z` to a real tag, not `@main`. Test on the **published** form — GHL's in-builder preview may not run `<script>`.
@@ -73,8 +86,9 @@ Paste each into a Custom Code / HTML block on its page. Ready-to-paste copies in
 `dist/*.js` embeds are **build artifacts — never hand-edit them.** After any change to a source `.html`:
 
 ```bash
-node scripts/build-embed.js            # build all widgets
-node scripts/build-embed.js bank       # or just one: bank | vehicles | assets
+node scripts/build-embed.js            # build all widgets + the unified bundle (embed-433a.js)
+node scripts/build-embed.js bank       # or just one: bank | vehicles | investments | … | income-expense-calc | assets
+node scripts/build-embed.js bundle     # rebuild the bundle's parts + re-concatenate embed-433a.js
 ```
 
 The build scopes the widget's CSS to its container id (doubled `#id#id` for specificity, no `!important`) and inlines markup + logic into a self-bootstrapping IIFE.

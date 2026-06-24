@@ -63,6 +63,7 @@
   if (!container) {
     container = document.createElement('div');
     container.id = 'assets-433a-widget';
+    container.setAttribute('data-ar-autoplaced', '1'); // engine may relocate next to its host field (true paste-once)
     document.body.appendChild(container);
   }
   container.innerHTML = `<div class="ar-container">

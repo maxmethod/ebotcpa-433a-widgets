@@ -1,42 +1,79 @@
 <!-- =====================================================================
      ebotCPA 433-A WIDGETS — GHL EMBED SNIPPETS
-     Paste each into a Custom Code / Custom HTML block on its OWN page.
-     Add the matching LARGE_TEXT field(s) to that same page (the widget hides
-     + drives them). Pin @v3.4.0 to a real published tag (not @main).
-
      Headers match Form 433-A (Rev. 6-2026) — Section 4, Personal Asset Information.
-     ===================================================================== -->
+     Pin to a real published tag (not @main). Current target tag: @v3.5.0.
+     =====================================================================
+
+  ┌───────────────────────────────────────────────────────────────────┐
+  │ OPTION A — UNIFIED BUNDLE  (recommended · TRUE paste-once)         │
+  └───────────────────────────────────────────────────────────────────┘
+  Paste this ONE <script> ONCE, anywhere on the survey (every step shares one DOM).
+  NO mount <div>s needed: each repeater finds its native LARGE_TEXT field by clean key
+  and renders right there (the native field is auto-hidden + driven); the income/expense
+  calc finds its total fields and injects its card. You only need the native fields on
+  their steps. Brand color comes from the survey's button color, else ebotCPA navy. -->
+
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-433a.js"></script>
+
+<!-- Native fields the bundle drives (add each on its step; the widget hides + writes it):
+       step 13  433a__bank_accounts_summary      (LARGE_TEXT)
+       step 14  433a__investments_summary         (LARGE_TEXT)
+       step 15  433a__digital_assets_summary      (LARGE_TEXT)
+       step 16  433a__available_credit_summary    (LARGE_TEXT)   ┐ one step,
+       step 17  433a__life_insurance_summary       (LARGE_TEXT)   ┘ two fields
+       step 18  433a__real_property_summary        (LARGE_TEXT)
+       step 19  433a__vehicles_summary             (LARGE_TEXT)
+       step 20  433a__personal_assets_summary      (LARGE_TEXT)
+       income   433a_income_-_*  line items  +  433a_income_-_total_monthly_auto   (TEXT)
+       expense  433a_expense_-_* line items  +  433a_expense_-_total_monthly_auto  (TEXT)
+     The two calc totals MUST be TEXT (GHL MONETARY fields drop a programmatic write on submit).
+     ⚠ Available Credit + Life Insurance MUST be on the SAME survey step: that one widget renders
+       both sections together and hides BOTH host fields wherever they are — splitting them onto
+       two steps leaves the second step blank (the engine logs a console warning if it detects this). -->
+
+
+
+<!-- ┌───────────────────────────────────────────────────────────────────┐
+     │ OPTION B — individual per-step embeds  (granular / legacy)        │
+     └───────────────────────────────────────────────────────────────────┘
+     One embed per step instead of the bundle. The mount <div> is now OPTIONAL — omit it
+     and the embed field-anchors to the native field, exactly like the bundle. Shown with
+     the <div> for the explicit-placement (back-compat) style. -->
 
 <!-- 13 — PERSONAL BANK ACCOUNTS · writes 433a__bank_accounts_summary -->
 <div id="bank-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-bank-accounts.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-bank-accounts.js"></script>
 
 <!-- 14 — INVESTMENTS · writes 433a__investments_summary -->
 <div id="investments-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-investments.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-investments.js"></script>
 
 <!-- 15 — DIGITAL ASSETS · writes 433a__digital_assets_summary -->
 <div id="digital-assets-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-digital-assets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-digital-assets.js"></script>
 
 <!-- 16 & 17 — AVAILABLE CREDIT + LIFE INSURANCE (one page, two sections)
      writes 433a__available_credit_summary AND 433a__life_insurance_summary -->
 <div id="credit-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-available-credit.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-available-credit.js"></script>
 
 <!-- 18 — REAL PROPERTY · writes 433a__real_property_summary -->
 <div id="real-property-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-real-property.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-real-property.js"></script>
 
 <!-- 19 — PERSONAL VEHICLES · writes 433a__vehicles_summary -->
 <div id="vehicle-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-vehicles.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-vehicles.js"></script>
 
 <!-- 20 — PERSONAL ASSETS · writes 433a__personal_assets_summary -->
 <div id="personal-assets-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.4.0/dist/embed-personal-assets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-personal-assets.js"></script>
 
-<!-- Fallback CDN (jsDelivr warming) — swap the matching <script> for its githack
-     twin, don't include both: https://rawcdn.githack.com/maxmethod/ebotcpa-433a-widgets/v3.4.0/dist/<file>.js
+<!-- Income/Expense live calc (also inside the bundle) · writes the two TEXT (Auto) totals -->
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.0/dist/embed-income-expense-calc.js"></script>
 
-     LEGACY: embed-assets.js (#assets-433a-widget) = combined bank+vehicles in one block. -->
+<!-- Fallback CDN (jsDelivr warming) — swap a <script> for its githack twin, don't include both:
+     https://rawcdn.githack.com/maxmethod/ebotcpa-433a-widgets/v3.5.0/dist/<file>.js
+
+     LEGACY: embed-assets.js (#assets-433a-widget) = combined bank+vehicles in one block (excluded
+     from the bundle; superseded by the split bank + vehicles widgets). -->

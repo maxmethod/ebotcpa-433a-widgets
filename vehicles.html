@@ -26,7 +26,9 @@
   body { font-family: var(--ar-font); color: var(--ar-text); margin: 0; padding: 24px; font-size: 15px; line-height: 1.5; }
   .ar-container { font-family: var(--ar-font); color: var(--ar-text); font-size: 15px; line-height: 1.5; }
 
-  .ar-section { background: var(--ar-surface); border: 1px solid var(--ar-border); border-radius: var(--ar-radius); padding: 18px 20px; margin-bottom: 18px; }
+  /* No card chrome: the widget sits flat on the survey page (transparent, no gray box) so it reads as native survey content. */
+  .ar-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 22px; }
+  .ar-section + .ar-section { padding-top: 22px; border-top: 1px solid var(--ar-border); } /* divider only between stacked sections (e.g. Credit + Life Insurance) */
   .ar-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
   .ar-section-title { font-size: 16px; font-weight: 700; margin: 0; }
   .ar-section-count { color: var(--ar-text-muted); font-size: 13px; }
@@ -55,7 +57,16 @@
 
   .ar-add-box { background: #fff; border: 1px dashed var(--ar-border-strong); border-radius: var(--ar-radius); padding: 14px; }
   .ar-add-box h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; }
-  .ar-field-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 10px; }
+  /* Balanced grid, driven by the widget's OWN width (not the viewport): minmax(240px)
+     means a column never shrinks below 240px — auto-fill drops the COUNT 3→2→1 as the
+     box narrows. 900px survey = 3 cols (a 5-field add-box wraps to two rows); tablet = 2;
+     portrait phone (~330px box) = 1 vertical column. So it can't produce a cramped row at
+     any width, and there's no viewport media query to disagree with the container. */
+  .ar-field-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px 16px; margin-bottom: 12px; }
+  /* Each cell is a flex column packed to the bottom: inputs bottom-align across a row even
+     when one label wraps to two lines, while every label stays flush above its own input
+     (the label is bound to its field by proximity only, so don't let it detach). */
+  .ar-field-group > div { display: flex; flex-direction: column; justify-content: flex-end; }
   .ar-actions-right { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
 
   .ar-items-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
@@ -171,7 +182,46 @@
   // ============================================================
   var OVR = (typeof window !== 'undefined' && window[CONFIG.configGlobal]) || {};
   var MAX = OVR.max || 10;
+
+  // Shared host-field wrapper selector (the label+input row GHL renders) — used by
+  // both the field-anchor placement and the host-field hider.
+  var HOST_WRAP_SEL = '.form-builder--item, .form-field-wrap, .menu-field-wrap, [class*="form-field-col"], .field';
+  function hostWrapOf(el) { return (el && el.closest && el.closest(HOST_WRAP_SEL)) || el; }
+
   var widgetEl = document.getElementById(CONFIG.containerId);
+
+  // TRUE PASTE-ONCE: if the embed auto-created the container (no <div> placed by the
+  // user — the bootstrap flags it data-ar-autoplaced), relocate it to sit right before
+  // its first section's native host field, so the widget lands in the right spot with NO
+  // mount div. Idempotent + retried in the poll (GHL can mount step fields late).
+  function placeWidget() {
+    if (!widgetEl || widgetEl.getAttribute('data-ar-autoplaced') !== '1' || widgetEl.getAttribute('data-ar-placed') === '1') return;
+    var host = realHost(CONFIG.sections[0].key);   // first section's real (non-fallback) host field
+    if (!host) return;                              // not mounted yet — try again next tick
+    var hw = hostWrapOf(host);
+    if (hw && hw.parentNode && hw !== widgetEl && !widgetEl.contains(hw)) {
+      hw.parentNode.insertBefore(widgetEl, hw);
+      widgetEl.setAttribute('data-ar-placed', '1');
+    }
+  }
+  placeWidget();
+
+  // One-time best-effort guard: a multi-section widget (e.g. Credit + Life Insurance) renders
+  // ALL its sections together, anchored to section[0], and hides EVERY host field wherever it
+  // is. If its section hosts sit on DIFFERENT survey steps, the later step would show only a
+  // hidden field (a blank step) — warn so it's caught in a staging test. Keep such widgets on
+  // ONE step. Returns true once it has decided (so it isn't re-checked every tick).
+  function warnSplitSections() {
+    var slide = function (k) { var h = realHost(k); return h && h.closest ? h.closest('[class*="slide-no-"]') : null; };
+    var s0 = slide(CONFIG.sections[0].key);
+    for (var i = 1; i < CONFIG.sections.length; i++) {
+      var sN = slide(CONFIG.sections[i].key);
+      if (!sN) return false; // a host isn't mounted yet — re-check next tick
+      if (s0 && sN !== s0) { try { console.warn('[433A] ' + CONFIG.containerId + ' has sections on different survey steps — keep all of its sections on ONE step (it renders them together and hides every host field).'); } catch (e) {} return true; }
+    }
+    return true;
+  }
+
   // scope the mount to THIS widget's own container (so multiple asset widgets
   // can coexist on one page); fall back to document for standalone preview.
   var mount = (widgetEl || document).querySelector('.ar-container');
@@ -312,8 +362,7 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        var w = el.closest('.form-builder--item, .form-field-wrap, .menu-field-wrap, [class*="form-field-col"], .field') || el;
-        w.style.display = 'none';
+        hostWrapOf(el).style.display = 'none';
       });
     });
   }
@@ -377,8 +426,23 @@
   reconcileFallbacks();
   applyPrimaryColor();
   hideHostFields();
-  var tries = 0;
-  var timer = setInterval(function () { tries++; applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
+  var tries = 0, layoutWarned = CONFIG.sections.length < 2;
+  var timer = setInterval(function () { tries++; placeWidget(); if (!layoutWarned) layoutWarned = warnSplitSections(); applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
+
+  // Durable, time-UNBOUNDED placement. The 300ms poll above only runs ~12s — plenty when
+  // GHL has all steps in the DOM at load (every widget places at once). But if GHL mounts a
+  // later step's fields only when the client navigates there — which can be many minutes in —
+  // this MutationObserver places the widget (and hides its host) the instant the field
+  // appears, with NO time limit. It self-disconnects once placed, and is never created for an
+  // explicitly-placed <div> (which needs no relocation), so there's no lingering cost.
+  if (window.MutationObserver && widgetEl &&
+      widgetEl.getAttribute('data-ar-autoplaced') === '1' && widgetEl.getAttribute('data-ar-placed') !== '1') {
+    var mo = new MutationObserver(function () {
+      placeWidget(); hideHostFields();
+      if (widgetEl.getAttribute('data-ar-placed') === '1') mo.disconnect();
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }
 })();
 </script>
 </body>

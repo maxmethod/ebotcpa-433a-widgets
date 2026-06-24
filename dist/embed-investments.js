@@ -22,14 +22,14 @@
     --ar-danger: #c94545; --ar-danger-hover: #a83838;
     --ar-radius: 8px;
     --ar-font: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  }#investments-433a-widget#investments-433a-widget * { box-sizing: border-box; }#investments-433a-widget#investments-433a-widget .ar-container { font-family: var(--ar-font); color: var(--ar-text); font-size: 15px; line-height: 1.5; }#investments-433a-widget#investments-433a-widget .ar-section { background: var(--ar-surface); border: 1px solid var(--ar-border); border-radius: var(--ar-radius); padding: 18px 20px; margin-bottom: 18px; }#investments-433a-widget#investments-433a-widget .ar-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }#investments-433a-widget#investments-433a-widget .ar-section-title { font-size: 16px; font-weight: 700; margin: 0; }#investments-433a-widget#investments-433a-widget .ar-section-count { color: var(--ar-text-muted); font-size: 13px; }#investments-433a-widget#investments-433a-widget .ar-subtitle { font-size: 12px; color: var(--ar-text-muted); margin: 0 0 14px; }#investments-433a-widget#investments-433a-widget label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--ar-text); }#investments-433a-widget#investments-433a-widget input[type="text"] {
+  }#investments-433a-widget#investments-433a-widget * { box-sizing: border-box; }#investments-433a-widget#investments-433a-widget .ar-container { font-family: var(--ar-font); color: var(--ar-text); font-size: 15px; line-height: 1.5; }#investments-433a-widget#investments-433a-widget .ar-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 22px; }#investments-433a-widget#investments-433a-widget .ar-section + .ar-section { padding-top: 22px; border-top: 1px solid var(--ar-border); }#investments-433a-widget#investments-433a-widget .ar-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }#investments-433a-widget#investments-433a-widget .ar-section-title { font-size: 16px; font-weight: 700; margin: 0; }#investments-433a-widget#investments-433a-widget .ar-section-count { color: var(--ar-text-muted); font-size: 13px; }#investments-433a-widget#investments-433a-widget .ar-subtitle { font-size: 12px; color: var(--ar-text-muted); margin: 0 0 14px; }#investments-433a-widget#investments-433a-widget label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--ar-text); }#investments-433a-widget#investments-433a-widget input[type="text"] {
     width: 100%; padding: 9px 12px; font-size: 14px; font-family: var(--ar-font);
     border: 1px solid var(--ar-border-strong); border-radius: var(--ar-radius);
     background: #fff; color: var(--ar-text); transition: border-color .15s, box-shadow .15s;
   }#investments-433a-widget#investments-433a-widget input:focus { outline: none; border-color: var(--ar-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ar-accent) 22%, transparent); }#investments-433a-widget#investments-433a-widget .ar-amount-wrap { position: relative; }#investments-433a-widget#investments-433a-widget .ar-amount-wrap input { padding-left: 22px; }#investments-433a-widget#investments-433a-widget .ar-amount-wrap::before { content: "$"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ar-text-muted); font-size: 14px; pointer-events: none; }#investments-433a-widget#investments-433a-widget button {
     font-family: var(--ar-font); font-size: 14px; padding: 9px 16px; border-radius: var(--ar-radius);
     border: 1px solid var(--ar-border-strong); background: #fff; color: var(--ar-text); cursor: pointer; font-weight: 500; transition: background .15s, border-color .15s;
-  }#investments-433a-widget#investments-433a-widget button:hover { background: var(--ar-surface); }#investments-433a-widget#investments-433a-widget button.ar-primary { background: var(--ar-accent); border-color: var(--ar-accent); color: #fff; }#investments-433a-widget#investments-433a-widget button.ar-primary:hover { background: var(--ar-accent-hover); border-color: var(--ar-accent-hover); }#investments-433a-widget#investments-433a-widget button.ar-danger-text { background: transparent; border: none; color: var(--ar-danger); padding: 4px 8px; font-size: 13px; }#investments-433a-widget#investments-433a-widget button.ar-danger-text:hover { color: var(--ar-danger-hover); background: transparent; }#investments-433a-widget#investments-433a-widget .ar-add-box { background: #fff; border: 1px dashed var(--ar-border-strong); border-radius: var(--ar-radius); padding: 14px; }#investments-433a-widget#investments-433a-widget .ar-add-box h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; }#investments-433a-widget#investments-433a-widget .ar-field-group { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-bottom: 10px; }#investments-433a-widget#investments-433a-widget .ar-actions-right { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }#investments-433a-widget#investments-433a-widget .ar-items-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }#investments-433a-widget#investments-433a-widget .ar-item-card { background: #fff; border: 1px solid var(--ar-border); border-radius: var(--ar-radius); padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }#investments-433a-widget#investments-433a-widget .ar-item-main { flex: 1; min-width: 0; }#investments-433a-widget#investments-433a-widget .ar-item-name { font-weight: 500; font-size: 14px; }#investments-433a-widget#investments-433a-widget .ar-item-meta { font-size: 13px; color: var(--ar-text-muted); margin-top: 2px; }#investments-433a-widget#investments-433a-widget .ar-item-amount { font-weight: 600; font-size: 14px; white-space: nowrap; text-align: right; }#investments-433a-widget#investments-433a-widget .ar-empty { font-size: 13px; color: var(--ar-text-muted); font-style: italic; padding: 6px 0 0; }#investments-433a-widget#investments-433a-widget .ar-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--ar-border); font-size: 14px; font-weight: 700; }#investments-433a-widget#investments-433a-widget .ar-total .ar-total-val { color: var(--ar-accent); font-size: 16px; font-variant-numeric: tabular-nums; }#investments-433a-widget#investments-433a-widget .ar-warn { background: #fff3cd; border: 1px solid #ffd866; color: #665300; padding: 8px 12px; border-radius: var(--ar-radius); font-size: 13px; margin-bottom: 10px; display: none; }#investments-433a-widget#investments-433a-widget .ar-warn.visible { display: block; }`;
+  }#investments-433a-widget#investments-433a-widget button:hover { background: var(--ar-surface); }#investments-433a-widget#investments-433a-widget button.ar-primary { background: var(--ar-accent); border-color: var(--ar-accent); color: #fff; }#investments-433a-widget#investments-433a-widget button.ar-primary:hover { background: var(--ar-accent-hover); border-color: var(--ar-accent-hover); }#investments-433a-widget#investments-433a-widget button.ar-danger-text { background: transparent; border: none; color: var(--ar-danger); padding: 4px 8px; font-size: 13px; }#investments-433a-widget#investments-433a-widget button.ar-danger-text:hover { color: var(--ar-danger-hover); background: transparent; }#investments-433a-widget#investments-433a-widget .ar-add-box { background: #fff; border: 1px dashed var(--ar-border-strong); border-radius: var(--ar-radius); padding: 14px; }#investments-433a-widget#investments-433a-widget .ar-add-box h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; }#investments-433a-widget#investments-433a-widget .ar-field-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px 16px; margin-bottom: 12px; }#investments-433a-widget#investments-433a-widget .ar-field-group > div { display: flex; flex-direction: column; justify-content: flex-end; }#investments-433a-widget#investments-433a-widget .ar-actions-right { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }#investments-433a-widget#investments-433a-widget .ar-items-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }#investments-433a-widget#investments-433a-widget .ar-item-card { background: #fff; border: 1px solid var(--ar-border); border-radius: var(--ar-radius); padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }#investments-433a-widget#investments-433a-widget .ar-item-main { flex: 1; min-width: 0; }#investments-433a-widget#investments-433a-widget .ar-item-name { font-weight: 500; font-size: 14px; }#investments-433a-widget#investments-433a-widget .ar-item-meta { font-size: 13px; color: var(--ar-text-muted); margin-top: 2px; }#investments-433a-widget#investments-433a-widget .ar-item-amount { font-weight: 600; font-size: 14px; white-space: nowrap; text-align: right; }#investments-433a-widget#investments-433a-widget .ar-empty { font-size: 13px; color: var(--ar-text-muted); font-style: italic; padding: 6px 0 0; }#investments-433a-widget#investments-433a-widget .ar-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--ar-border); font-size: 14px; font-weight: 700; }#investments-433a-widget#investments-433a-widget .ar-total .ar-total-val { color: var(--ar-accent); font-size: 16px; font-variant-numeric: tabular-nums; }#investments-433a-widget#investments-433a-widget .ar-warn { background: #fff3cd; border: 1px solid #ffd866; color: #665300; padding: 8px 12px; border-radius: var(--ar-radius); font-size: 13px; margin-bottom: 10px; display: none; }#investments-433a-widget#investments-433a-widget .ar-warn.visible { display: block; }`;
   document.head.appendChild(style);
 
   // ---- markup ----
@@ -38,6 +38,7 @@
   if (!container) {
     container = document.createElement('div');
     container.id = 'investments-433a-widget';
+    container.setAttribute('data-ar-autoplaced', '1'); // engine may relocate next to its host field (true paste-once)
     document.body.appendChild(container);
   }
   container.innerHTML = `<div class="ar-container"></div>`;
@@ -83,7 +84,46 @@
   // ============================================================
   var OVR = (typeof window !== 'undefined' && window[CONFIG.configGlobal]) || {};
   var MAX = OVR.max || 10;
+
+  // Shared host-field wrapper selector (the label+input row GHL renders) — used by
+  // both the field-anchor placement and the host-field hider.
+  var HOST_WRAP_SEL = '.form-builder--item, .form-field-wrap, .menu-field-wrap, [class*="form-field-col"], .field';
+  function hostWrapOf(el) { return (el && el.closest && el.closest(HOST_WRAP_SEL)) || el; }
+
   var widgetEl = document.getElementById(CONFIG.containerId);
+
+  // TRUE PASTE-ONCE: if the embed auto-created the container (no <div> placed by the
+  // user — the bootstrap flags it data-ar-autoplaced), relocate it to sit right before
+  // its first section's native host field, so the widget lands in the right spot with NO
+  // mount div. Idempotent + retried in the poll (GHL can mount step fields late).
+  function placeWidget() {
+    if (!widgetEl || widgetEl.getAttribute('data-ar-autoplaced') !== '1' || widgetEl.getAttribute('data-ar-placed') === '1') return;
+    var host = realHost(CONFIG.sections[0].key);   // first section's real (non-fallback) host field
+    if (!host) return;                              // not mounted yet — try again next tick
+    var hw = hostWrapOf(host);
+    if (hw && hw.parentNode && hw !== widgetEl && !widgetEl.contains(hw)) {
+      hw.parentNode.insertBefore(widgetEl, hw);
+      widgetEl.setAttribute('data-ar-placed', '1');
+    }
+  }
+  placeWidget();
+
+  // One-time best-effort guard: a multi-section widget (e.g. Credit + Life Insurance) renders
+  // ALL its sections together, anchored to section[0], and hides EVERY host field wherever it
+  // is. If its section hosts sit on DIFFERENT survey steps, the later step would show only a
+  // hidden field (a blank step) — warn so it's caught in a staging test. Keep such widgets on
+  // ONE step. Returns true once it has decided (so it isn't re-checked every tick).
+  function warnSplitSections() {
+    var slide = function (k) { var h = realHost(k); return h && h.closest ? h.closest('[class*="slide-no-"]') : null; };
+    var s0 = slide(CONFIG.sections[0].key);
+    for (var i = 1; i < CONFIG.sections.length; i++) {
+      var sN = slide(CONFIG.sections[i].key);
+      if (!sN) return false; // a host isn't mounted yet — re-check next tick
+      if (s0 && sN !== s0) { try { console.warn('[433A] ' + CONFIG.containerId + ' has sections on different survey steps — keep all of its sections on ONE step (it renders them together and hides every host field).'); } catch (e) {} return true; }
+    }
+    return true;
+  }
+
   // scope the mount to THIS widget's own container (so multiple asset widgets
   // can coexist on one page); fall back to document for standalone preview.
   var mount = (widgetEl || document).querySelector('.ar-container');
@@ -224,8 +264,7 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        var w = el.closest('.form-builder--item, .form-field-wrap, .menu-field-wrap, [class*="form-field-col"], .field') || el;
-        w.style.display = 'none';
+        hostWrapOf(el).style.display = 'none';
       });
     });
   }
@@ -289,8 +328,23 @@
   reconcileFallbacks();
   applyPrimaryColor();
   hideHostFields();
-  var tries = 0;
-  var timer = setInterval(function () { tries++; applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
+  var tries = 0, layoutWarned = CONFIG.sections.length < 2;
+  var timer = setInterval(function () { tries++; placeWidget(); if (!layoutWarned) layoutWarned = warnSplitSections(); applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
+
+  // Durable, time-UNBOUNDED placement. The 300ms poll above only runs ~12s — plenty when
+  // GHL has all steps in the DOM at load (every widget places at once). But if GHL mounts a
+  // later step's fields only when the client navigates there — which can be many minutes in —
+  // this MutationObserver places the widget (and hides its host) the instant the field
+  // appears, with NO time limit. It self-disconnects once placed, and is never created for an
+  // explicitly-placed <div> (which needs no relocation), so there's no lingering cost.
+  if (window.MutationObserver && widgetEl &&
+      widgetEl.getAttribute('data-ar-autoplaced') === '1' && widgetEl.getAttribute('data-ar-placed') !== '1') {
+    var mo = new MutationObserver(function () {
+      placeWidget(); hideHostFields();
+      if (widgetEl.getAttribute('data-ar-placed') === '1') mo.disconnect();
+    });
+    mo.observe(document.documentElement, { childList: true, subtree: true });
+  }
 })();
   })();
 })();
