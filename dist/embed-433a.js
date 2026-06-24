@@ -203,9 +203,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -310,7 +331,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -347,7 +368,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
@@ -556,9 +577,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -663,7 +705,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -700,7 +742,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
@@ -949,9 +991,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -1056,7 +1119,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -1093,7 +1156,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
@@ -1396,9 +1459,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -1503,7 +1587,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -1540,7 +1624,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
@@ -1819,9 +1903,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -1926,7 +2031,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -1963,7 +2068,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
@@ -2228,9 +2333,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -2335,7 +2461,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -2372,7 +2498,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
@@ -2644,9 +2770,30 @@
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
   function num(v) { var n = parseMoney(v); return n == null ? 0 : n; }
 
+  // GHL surveys render the fieldKey's "__" as "_-_" in data-q (fieldKey
+  // 433a__bank_accounts_summary -> survey data-q 433a_-_bank_accounts_summary), and the
+  // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
+  // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
+  // it appends to <body>, never hides the native field, and never writes the summary back.
+  function hostSel(key, live) {
+    var suf = live ? ':not([data-ar-fallback])' : '';
+    var dash = key.replace(/__/g, '_-_');
+    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
+    return sel.join(', ');
+  }
+
   function setAll(key, value) {
-    document.querySelectorAll('[name="' + key + '"], [data-q="' + key + '"]').forEach(function (el) {
-      el.value = value;
+    document.querySelectorAll(hostSel(key)).forEach(function (el) {
+      if (!('value' in el)) return; // a wrapper can also carry data-q — only write to the field itself
+      // React-safe write: set through the native value setter so GHL's React survey actually
+      // RECORDS the value. A plain `el.value=` shows in the DOM but React can drop it on submit
+      // (same lesson the income/expense calc learned). Then fire input+change for onChange.
+      var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+                : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+                : HTMLInputElement.prototype;
+      var d = Object.getOwnPropertyDescriptor(proto, 'value');
+      if (d && d.set) d.set.call(el, value); else el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
       el.dispatchEvent(new Event('change', { bubbles: true }));
     });
@@ -2751,7 +2898,7 @@
   // ---------- hide host fields + fallback inputs ----------
   function hideHostFields() {
     CONFIG.sections.forEach(function (sec) {
-      document.querySelectorAll('[name="' + sec.key + '"], [data-q="' + sec.key + '"]').forEach(function (el) {
+      document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
         hostWrapOf(el).style.display = 'none';
       });
@@ -2788,7 +2935,7 @@
 
   // ---------- fallback inputs: ONLY when there is no real host field (standalone preview).
   // Avoids a duplicate element sharing the GHL field's name, which would break submit. ----------
-  function realHost(key) { return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])'); }
+  function realHost(key) { return document.querySelector(hostSel(key, true)); }
   function reconcileFallbacks() {
     CONFIG.sections.forEach(function (sec) {
       var real = realHost(sec.key);
