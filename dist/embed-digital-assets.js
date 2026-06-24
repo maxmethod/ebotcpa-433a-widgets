@@ -133,14 +133,16 @@
     if (s == null) return '';
     return String(s).replace(/[&<>"']/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]; });
   }
+  function sanitize(v) { return String(v == null ? '' : v).replace(/\s*[|\r\n]+\s*/g, ' / ').trim(); } // pipe/newline would corrupt the pipe-delimited, one-row-per-line summary the webhook/PDF parses
   function parseMoney(s) {
     if (s == null) return null;
     var t = String(s).trim();
     if (t === '') return null;
     var neg = /^\(.*\)$/.test(t) || /^-/.test(t);  // accounting parens or leading minus = negative
-    var str = t.replace(/[^0-9.]/g, '');           // keep digits + dot only ($ , ( ) - letters dropped)
-    if (!/^\d*\.?\d+$/.test(str)) return null;      // non-numeric / garbage -> null (raw text is preserved by money())
-    var n = Number(str);
+    // strip ONLY currency symbol, thousands separators, surrounding parens/sign/space — never interior junk
+    var core = t.replace(/^[-(]+/, '').replace(/[)\s]+$/, '').replace(/[$,\s]/g, '');
+    if (!/^\d*\.?\d+$/.test(core)) return null;     // letters, interior '-' (ranges like 2500-3000), 'e', extra dots -> null (money() preserves raw text)
+    var n = Number(core);
     if (!isFinite(n)) return null;
     return neg ? -n : n;
   }
@@ -178,6 +180,7 @@
         if (c.kind === 'calc') v = money(calcVal(c, row));
         else if (c.kind === 'money') v = row[c.id] ? money(row[c.id]) : '';
         else v = (row[c.id] || '').trim();
+        v = sanitize(v);  // neutralize pipe/newline so a row can't corrupt the delimited summary
         if (c.gate) parts.push(v || '(unnamed)');
         else if (v !== '') parts.push((c.slabel ? c.slabel + ': ' : '') + v);
       });

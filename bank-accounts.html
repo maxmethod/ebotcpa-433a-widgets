@@ -137,9 +137,9 @@
       <p class="ar-empty" id="bank-empty">No accounts added yet.</p>
     </div>
 
-    <!-- Fallback placeholder so the widget still syncs when previewed standalone.
-         In a real GHL form the matching field receives the same value. -->
-    <input type="hidden" name="433a__bank_accounts_summary">
+    <!-- No hardcoded fallback input here: a duplicate element sharing the GHL field's
+         name breaks submit (RadioNodeList). The script appends a hidden fallback ONLY
+         when no real host field exists (standalone preview). See reconcileFallbacks(). -->
   </div>
 
 <script>
@@ -163,15 +163,24 @@
       return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c];
     });
   }
+  function sanitize(v) { return String(v == null ? '' : v).replace(/\s*[|\r\n]+\s*/g, ' / ').trim(); } // pipe/newline would corrupt the pipe-delimited summary
   function parseMoney(s) {
-    if (s == null || String(s).trim() === '') return null;
-    var n = Number(String(s).replace(/[^0-9.\-]/g, ''));
-    return isFinite(n) ? n : null;
+    if (s == null) return null;
+    var t = String(s).trim();
+    if (t === '') return null;
+    var neg = /^\(.*\)$/.test(t) || /^-/.test(t);   // accounting parens or leading minus = negative
+    // strip ONLY currency symbol, thousands separators, surrounding parens/sign/space — never interior junk
+    var core = t.replace(/^[-(]+/, '').replace(/[)\s]+$/, '').replace(/[$,\s]/g, '');
+    if (!/^\d*\.?\d+$/.test(core)) return null;      // "N/A", "abc", ranges "2500-3000", "1e3", extra dots -> null (raw text preserved by money())
+    var n = Number(core);
+    if (!isFinite(n)) return null;
+    return neg ? -n : n;
   }
   function fmtMoney(n) {
-    var v = Number(n) || 0;
-    var hasCents = Math.round(v * 100) % 100 !== 0;
-    return '$' + v.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 });
+    var v = Number(n) || 0, neg = v < 0, abs = Math.abs(v);
+    var hasCents = Math.round(abs * 100) % 100 !== 0;
+    var s = '$' + abs.toLocaleString('en-US', { minimumFractionDigits: hasCents ? 2 : 0, maximumFractionDigits: 2 });
+    return neg ? '(' + s + ')' : s;  // negatives in accounting parentheses
   }
   function money(raw) { var n = parseMoney(raw); return n != null ? fmtMoney(n) : (raw || '').trim(); }
 
@@ -189,7 +198,7 @@
 
   function buildBankSummary() {
     return state.banks.map(function (b) {
-      return [b.name, b.type, money(b.balance)].join(' | ');
+      return [sanitize(b.name), sanitize(b.type), sanitize(money(b.balance))].join(' | ');
     }).join('\n');
   }
   function sync(write) { if (!write) return; setAll(FIELD_KEYS.bank, buildBankSummary()); }
@@ -293,8 +302,40 @@
     widgetEl.style.setProperty('--ar-accent-hover', darken(color, 0.14));
   }
 
+  // ============================================================
+  // DYNAMIC FALLBACK INPUT — created ONLY when there is no real host field
+  // (standalone preview). A hardcoded duplicate sharing the GHL field name turns
+  // form[name] into a RadioNodeList and breaks submit, so we never ship one.
+  // ============================================================
+  var mount = (widgetEl || document).querySelector('.ar-container');
+  function realHost(key) {
+    return document.querySelector('[name="' + key + '"]:not([data-ar-fallback]), [data-q="' + key + '"]:not([data-ar-fallback])');
+  }
+  function reconcileFallbacks() {
+    if (!mount) return;
+    FIELD_KEYS.bank.forEach(function (key) {
+      if (!key) return;
+      var real = realHost(key);
+      var fb = mount.querySelector('input[data-ar-fallback="1"][name="' + key + '"]');
+      if (real && fb) { fb.parentNode.removeChild(fb); setAll([key], buildBankSummary()); } // real host appeared -> drop the dup, sync the real field
+      else if (!real && !fb) { var hi = document.createElement('input'); hi.type = 'hidden'; hi.setAttribute('name', key); hi.setAttribute('data-ar-fallback', '1'); mount.appendChild(hi); }
+    });
+  }
+
+  // ============================================================
+  // FLUSH an in-progress add-box row before the form advances/submits, so a user
+  // who fills the fields but forgets to click "Add account" doesn't lose the row.
+  // ============================================================
+  function flushPending() { if (bankEls.name.value.trim()) { var b = $('bank-add'); if (b) b.click(); } }
+  document.addEventListener('submit', flushPending, true);
+  document.addEventListener('click', function (e) {
+    var t = e.target && e.target.closest && e.target.closest('.ghl-footer-next, .ghl-submit-btn, .ghl-footer-submit, button[type="submit"]');
+    if (t) flushPending();
+  }, true);
+
   // ---------- boot ----------
   renderBanks(false);
+  reconcileFallbacks();
   applyPrimaryColor();
   hideHostFields();
 
@@ -303,6 +344,7 @@
     tries++;
     applyPrimaryColor();
     hideHostFields();
+    reconcileFallbacks();
     if (tries > 40) clearInterval(timer);
   }, 300);
 })();

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>433-A Asset Widgets — Local Test Harness</title>
+<!--
+  Faithful local mimic of how each widget sits in a GHL multi-step form/survey:
+  a Custom-Code block (the widget embed) + a real LARGE_TEXT host field matched by
+  clean key. The widget HIDES the host wrapper (.form-builder--item) and writes the
+  pipe-delimited summary back into it. The black "mirror" below each step reads that
+  hidden host value live — that is exactly what GHL stores / posts to the webhook.
+  Loads the LOCAL committed dist/*.js (the deployed artifacts), not the CDN.
+-->
+<style>
+  body { font-family: 'DM Sans', system-ui, -apple-system, sans-serif; margin: 0; padding: 0; background: #eef1f5; color: #1a2332; }
+  .page { max-width: 780px; margin: 0 auto; padding: 24px 24px 120px; }
+  h1 { font-size: 22px; margin: 0 0 6px; }
+  .lead { color: #5a6578; font-size: 14px; margin: 0 0 18px; }
+  .ghl-step { background: #fff; border: 1px solid #d4dae3; border-radius: 12px; padding: 20px; margin: 20px 0; box-shadow: 0 1px 3px rgba(0,0,0,.05); }
+  .ghl-step > h2 { margin: 0 0 2px; font-size: 17px; }
+  .ghl-step > .pg { font-size: 12px; color: #8a93a3; margin: 0 0 14px; font-family: ui-monospace, Menlo, monospace; }
+  /* GHL-like host field wrapper — the widget will set display:none on this */
+  .form-builder--item { margin: 12px 0 0; }
+  .form-builder--item label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; color: #5a6578; }
+  .form-builder--item textarea { width: 100%; min-height: 54px; font-family: ui-monospace, Menlo, monospace; font-size: 12px; padding: 8px; border: 1px solid #c9cfd8; border-radius: 6px; box-sizing: border-box; }
+  /* live inspector mirror — NOT hidden by the widget */
+  .mirror { margin-top: 12px; background: #0f172a; color: #7ee787; font-family: ui-monospace, Menlo, monospace; font-size: 12px; white-space: pre-wrap; padding: 10px 12px; border-radius: 8px; min-height: 16px; line-height: 1.45; }
+  .mirror .lbl { color: #6b7a90; }
+  .mirror .empty { color: #475569; font-style: italic; }
+  .ghl-footer { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: flex-end; gap: 10px; padding: 14px 24px; background: #fff; border-top: 1px solid #d4dae3; box-shadow: 0 -2px 8px rgba(0,0,0,.06); }
+  .ghl-footer-next { background: #1A2744; color: #fff; border: none; padding: 11px 26px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+  .ghl-footer-next:hover { background: #11192d; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>433-A Asset Widgets — Local Test Harness</h1>
+  <p class="lead">Each card = one GHL form step. The black mirror shows the live value written to the hidden host field (what GHL saves / posts to the webhook). Click <b>Next →</b> to test the flush-pending-row-on-advance behavior.</p>
+
+  <!-- 13 — PERSONAL BANK ACCOUNTS -->
+  <div class="ghl-step">
+    <h2>Step 13 — Personal Bank Accounts</h2>
+    <p class="pg">writes 433a__bank_accounts_summary</p>
+    <div id="bank-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__bank_accounts_summary (hidden host)</label><textarea name="433a__bank_accounts_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__bank_accounts_summary"></div>
+  </div>
+
+  <!-- 14 — INVESTMENTS -->
+  <div class="ghl-step">
+    <h2>Step 14 — Investments</h2>
+    <p class="pg">writes 433a__investments_summary · equity = value − loan (floored at $0)</p>
+    <div id="investments-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__investments_summary (hidden host)</label><textarea name="433a__investments_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__investments_summary"></div>
+  </div>
+
+  <!-- 15 — DIGITAL ASSETS -->
+  <div class="ghl-step">
+    <h2>Step 15 — Digital Assets</h2>
+    <p class="pg">writes 433a__digital_assets_summary · units + USD value</p>
+    <div id="digital-assets-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__digital_assets_summary (hidden host)</label><textarea name="433a__digital_assets_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__digital_assets_summary"></div>
+  </div>
+
+  <!-- 16 & 17 — AVAILABLE CREDIT + LIFE INSURANCE (one step, two sections, two fields) -->
+  <div class="ghl-step">
+    <h2>Step 16 &amp; 17 — Available Credit + Life Insurance</h2>
+    <p class="pg">writes 433a__available_credit_summary (NOT floored) AND 433a__life_insurance_summary (avail-cash floored)</p>
+    <div id="credit-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__available_credit_summary (hidden host)</label><textarea name="433a__available_credit_summary"></textarea></div>
+    <div class="form-builder--item"><label>433a__life_insurance_summary (hidden host)</label><textarea name="433a__life_insurance_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__available_credit_summary"></div>
+    <div class="mirror" data-mirror="433a__life_insurance_summary"></div>
+  </div>
+
+  <!-- 18 — REAL PROPERTY -->
+  <div class="ghl-step">
+    <h2>Step 18 — Real Property</h2>
+    <p class="pg">writes 433a__real_property_summary · equity floored at $0</p>
+    <div id="real-property-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__real_property_summary (hidden host)</label><textarea name="433a__real_property_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__real_property_summary"></div>
+  </div>
+
+  <!-- 19 — PERSONAL VEHICLES -->
+  <div class="ghl-step">
+    <h2>Step 19 — Personal Vehicles</h2>
+    <p class="pg">writes 433a__vehicles_summary</p>
+    <div id="vehicle-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__vehicles_summary (hidden host)</label><textarea name="433a__vehicles_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__vehicles_summary"></div>
+  </div>
+
+  <!-- 20 — PERSONAL ASSETS -->
+  <div class="ghl-step">
+    <h2>Step 20 — Personal Assets</h2>
+    <p class="pg">writes 433a__personal_assets_summary · equity floored at $0</p>
+    <div id="personal-assets-433a-widget" data-primary-color="#1A2744"></div>
+    <div class="form-builder--item"><label>433a__personal_assets_summary (hidden host)</label><textarea name="433a__personal_assets_summary"></textarea></div>
+    <div class="mirror" data-mirror="433a__personal_assets_summary"></div>
+  </div>
+</div>
+
+<div class="ghl-footer"><button type="button" class="ghl-footer-next">Next &rarr;</button></div>
+
+<!-- load the LOCAL committed builds (the deployed v3.2.0 artifacts) -->
+<script src="./dist/embed-bank-accounts.js"></script>
+<script src="./dist/embed-investments.js"></script>
+<script src="./dist/embed-digital-assets.js"></script>
+<script src="./dist/embed-available-credit.js"></script>
+<script src="./dist/embed-real-property.js"></script>
+<script src="./dist/embed-vehicles.js"></script>
+<script src="./dist/embed-personal-assets.js"></script>
+
+<script>
+  // Live mirror of each hidden host field's value (what GHL would store).
+  function refreshMirrors() {
+    document.querySelectorAll('.mirror').forEach(function (m) {
+      var key = m.dataset.mirror;
+      var el = document.querySelector('textarea[name="' + key + '"], input[name="' + key + '"]');
+      var v = el ? el.value : '';
+      m.innerHTML = '<span class="lbl">' + key + ' &rarr;</span>\n' +
+        (v ? v : '<span class="empty">(empty)</span>');
+    });
+  }
+  document.addEventListener('input', refreshMirrors, true);
+  document.addEventListener('change', refreshMirrors, true);
+  setInterval(refreshMirrors, 400);
+  refreshMirrors();
+</script>
+</body>
+</html>

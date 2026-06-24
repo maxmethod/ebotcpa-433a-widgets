@@ -14,3 +14,4 @@ node_modules/
 
 # Preview server artifacts
 .claude/
+snippets/
