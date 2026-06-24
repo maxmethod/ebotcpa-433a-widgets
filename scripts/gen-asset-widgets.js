@@ -105,6 +105,51 @@ const WIDGETS = {
         ]
       }]
     }
+  },
+  // Bank + Vehicles converted FROM the old standalone pre-engine widgets TO the
+  // config-driven engine (v3.4.0) — full IRS line 13 / line 19 column sets, and they
+  // now inherit every engine hardening (flush-on-next, dynamic fallback, sanitize,
+  // strict parseMoney). Container ids + clean keys are unchanged, so embeds don't move.
+  'bank-accounts.html': {
+    title: '433-A — Bank Accounts Repeater', container: 'bank-433a-widget', keyComment: '433a__bank_accounts_summary',
+    config: {
+      containerId: 'bank-433a-widget', configGlobal: 'BANK_433A_CONFIG',
+      sections: [{
+        key: '433a__bank_accounts_summary', title: 'Cash & Bank Accounts',
+        subtitle: 'Checking, savings, money market, online/stored-value accounts — list every institution (IRS Form 433-A, line 13).',
+        addLabel: 'Add a bank / account', addBtn: 'Add account', gateWarn: 'Enter the institution name before adding.', emptyNote: 'No accounts added yet.',
+        totalLabel: 'Total cash in banks', totalCol: 'balance',
+        columns: [
+          { id: 'institution', label: 'Bank / institution name & address', kind: 'text', ph: 'Name, street, city, state, ZIP', gate: true, role: 'name' },
+          { id: 'acct', label: 'Account number', kind: 'text', ph: 'Acct. no', slabel: 'Acct' },
+          { id: 'type', label: 'Type of account', kind: 'text', ph: 'Checking, Savings, MMA…', slabel: 'Type', role: 'meta' },
+          { id: 'asof', label: 'Balance as of (date)', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'As of' },
+          { id: 'balance', label: 'Account balance', kind: 'money', slabel: 'Balance', role: 'amount' }
+        ]
+      }]
+    }
+  },
+  'vehicles.html': {
+    title: '433-A — Vehicles Repeater', container: 'vehicle-433a-widget', keyComment: '433a__vehicles_summary',
+    config: {
+      containerId: 'vehicle-433a-widget', configGlobal: 'VEHICLE_433A_CONFIG',
+      sections: [{
+        key: '433a__vehicles_summary', title: 'Vehicles',
+        subtitle: 'Cars, boats, RVs, motorcycles, trailers, etc. — owned or leased (IRS Form 433-A, line 19).',
+        addLabel: 'Add a vehicle', addBtn: 'Add vehicle', gateWarn: 'Enter the year, make & model before adding.', emptyNote: 'No vehicles added yet.',
+        totalLabel: 'Total equity (FMV − loans)', totalCol: 'equity',
+        columns: [
+          { id: 'desc', label: 'Year, make & model', kind: 'text', ph: 'e.g. 2019 Ford F-150', gate: true, role: 'name' },
+          { id: 'yearpurchased', label: 'Year purchased', kind: 'text', ph: 'YYYY', slabel: 'Yr purchased' },
+          { id: 'leaseown', label: 'Leased or owned', kind: 'text', ph: 'Lease / Own', slabel: 'Lease/Own', role: 'meta' },
+          { id: 'fmv', label: 'Current market value', kind: 'money', slabel: 'FMV' },
+          { id: 'loan', label: 'Current loan balance', kind: 'money', slabel: 'Loan' },
+          { id: 'payment', label: 'Monthly lease / loan amount', kind: 'money', slabel: 'Monthly' },
+          { id: 'finalpayment', label: 'Date of final payment', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'Final pmt' },
+          { id: 'equity', label: 'Equity', kind: 'calc', sub: ['fmv', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
+        ]
+      }]
+    }
   }
 };
 
