@@ -26,6 +26,8 @@
   .urg-card:hover{ border-color:#cbd5e1; box-shadow:0 5px 14px rgba(16,24,40,.09); transform:translateY(-1px); }
   .option-radio.is-selected .urg-card{ border-color:var(--urg-c); box-shadow:0 0 0 3px color-mix(in srgb, var(--urg-c) 20%, transparent); }
   .urg-badge{ display:inline-flex; align-items:center; gap:7px; background:var(--urg-c); color:#fff; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:5px 12px 5px 9px; border-radius:999px; }
+  /* GHL forces label text to a dark slate (#344054) with high specificity — force the badge label white so it reads on every badge color (esp. the navy STANDARD pill) */
+  .urg-cards-root .urg-badge, .urg-cards-root .urg-badge *{ color:#fff !important; }
   .urg-dot{ width:12px; height:12px; border-radius:50%; background:radial-gradient(circle at 32% 28%, rgba(255,255,255,.85), var(--urg-c) 62%, rgba(0,0,0,.25)); box-shadow:inset 0 0 0 1px rgba(255,255,255,.35); }
   .urg-title{ font-weight:700; font-size:15px; color:#1A2744; margin:12px 0 6px; }
   .urg-codes{ font-size:12px; color:#6b7280; line-height:1.5; }
