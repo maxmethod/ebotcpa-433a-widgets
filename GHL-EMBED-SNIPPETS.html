@@ -15,6 +15,13 @@
   bundle (embed-433a.js) only suits surveys where each asset slide has another visible
   element; on this survey it makes 7-10/12 vanish. -->
 
+<!-- URGENCY CARDS (slide 1) · restyles the "What IRS notice did you receive?" radio group
+     (Critical / High Priority / Standard) into selectable cards + a "Why this matters" callout.
+     NO div + NO native field needed — it finds the radio group by data-q and enhances it in place.
+     The radios stay functional (whole card = the label). Paste this ONE line on slide 1.
+     Edit the codes / SLAs / SHOW_CALLOUT in urgency-cards.html, then rebuild + re-tag. -->
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.6.0/dist/embed-urgency-cards.js"></script>
+
 <!-- BANK ACCOUNTS · writes 433a__bank_accounts_summary -->
 <div id="bank-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
 <script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.3/dist/embed-bank-accounts.js"></script>

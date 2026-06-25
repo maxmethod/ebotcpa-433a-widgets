@@ -95,6 +95,18 @@ const WIDGETS = {
     guard: '__assets433aEmbedLoaded',
     label: 'assets-repeater'
   },
+  // Module (style + script, NO container/markup): the slide-1 urgency-question card styler.
+  // Finds the urgency radio group (data-q irs_intake_-_urgency_level) and restyles its three
+  // options into selectable cards (badge/title/codes/SLA) + a "Why this matters" callout.
+  // CSS is class-namespaced (.urg-*) so it doesn't need #id scoping. No mount div.
+  urgencyCards: {
+    input: 'urgency-cards.html',
+    output: 'dist/embed-urgency-cards.js',
+    styleAttr: 'data-433a-urgency',
+    guard: '__urgencyCards433aLoaded',
+    label: 'urgency-cards',
+    module: true
+  },
   // Module (style + script, NO container/markup): the income/expense live calculator.
   // It field-anchors itself (finds the total fields, injects its own card), so it needs
   // no mount div. Snapshot of the other session's tested calc — see income-expense-calc.html.
