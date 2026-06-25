@@ -45,11 +45,13 @@
 <div id="personal-assets-433a-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
 <script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.3/dist/embed-personal-assets.js"></script>
 
-<!-- INCOME / EXPENSE live calc · writes the two TEXT (Auto) totals.
-     Paste ONCE on the Income slide (it drives BOTH income + expense via the shared DOM).
-     These slides have visible line-item questions, so they are NOT at risk of being skipped.
-     The two total fields MUST be TEXT (GHL MONETARY fields drop a programmatic write on submit). -->
-<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.3/dist/embed-income-expense-calc.js"></script>
+<!-- INCOME / EXPENSE live calc · writes THREE TEXT (Auto) fields: income total, expense total,
+     and Net Difference (Line 51 = income − expenses). Paste ONCE on the Income slide (it drives
+     income + expense + net via the shared DOM). These slides have visible line-item questions so
+     they are NOT at risk of being skipped. All three Auto fields MUST be TEXT (GHL MONETARY fields
+     drop a programmatic write on submit). The net card renders on whichever slide holds the
+     433a_line_51_-_net_difference_auto field — put that field where you want the net shown. -->
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.5.4/dist/embed-income-expense-calc.js"></script>
 
 <!-- Native fields each widget drives (LARGE_TEXT, add to the matching slide):
        433a__bank_accounts_summary · 433a__investments_summary · 433a__digital_assets_summary
