@@ -333,7 +333,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
@@ -707,7 +725,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
@@ -1121,7 +1157,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
@@ -1589,7 +1643,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
@@ -2033,7 +2105,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
@@ -2463,7 +2553,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
@@ -2900,7 +3008,25 @@
     CONFIG.sections.forEach(function (sec) {
       document.querySelectorAll(hostSel(sec.key)).forEach(function (el) {
         if (el.getAttribute('data-ar-fallback') != null) return;
-        hostWrapOf(el).style.display = 'none';
+        var wrap = hostWrapOf(el);
+        if (wrap && wrap !== el) {
+          // Keep the native field's .form-builder--item RENDERED (display:block) but emptied.
+          // GHL auto-SKIPS any survey slide whose every form item is display:none, and our
+          // injected widget is NOT a GHL form item — so an asset slide that holds ONLY this
+          // summary field would be skipped if we hid the whole wrapper. Instead hide just the
+          // field's inner label + input; the wrapper stays counted, the client sees only the widget.
+          if (wrap.classList) wrap.classList.remove('d-none');
+          // display:block keeps GHL's "slide has a visible form item" check happy; the 1px
+          // overflow-hidden box keeps it non-zero-height too (in case GHL checks rendered height),
+          // while showing nothing. Inner label + input hidden so only our widget is visible.
+          wrap.style.setProperty('display', 'block', 'important');
+          wrap.style.margin = '0'; wrap.style.padding = '0'; wrap.style.border = '0';
+          wrap.style.height = '1px'; wrap.style.minHeight = '1px'; wrap.style.overflow = 'hidden';
+          wrap.querySelectorAll('label').forEach(function (l) { l.style.display = 'none'; });
+          el.style.display = 'none';
+        } else if (wrap) {
+          wrap.style.display = 'none'; // no GHL wrapper (standalone) — just hide the field
+        }
       });
     });
   }
