@@ -18,8 +18,10 @@
   .urg-callout strong{ color:#3f3413; }
   /* the options wrapper becomes a responsive card grid: 3-across on desktop, wraps to 1 on phones */
   .urg-cards-root{ display:grid !important; grid-template-columns:repeat(auto-fit, minmax(185px, 1fr)); gap:12px; margin-top:6px; }
-  .urg-cards-root .option-radio{ margin:0 !important; padding:0 !important; }
-  .urg-cards-root .standard-radio-container{ display:block !important; margin:0 !important; }
+  /* height:100% down the whole chain so every card fills its (equal-height, stretched) grid
+     cell — otherwise a card with fewer notice codes (one line, e.g. Critical) ends up shorter */
+  .urg-cards-root .option-radio{ margin:0 !important; padding:0 !important; height:100%; }
+  .urg-cards-root .standard-radio-container{ display:block !important; margin:0 !important; height:100%; }
   /* hide the native radio dot — the whole card is the clickable label (for=) */
   .urg-cards-root input[type=radio]{ position:absolute !important; opacity:0 !important; width:1px; height:1px; pointer-events:none; }
   .urg-card{ display:block; cursor:pointer; background:#fff; border:1.5px solid #e5e7eb; border-radius:14px; padding:16px 14px; text-align:center; height:100%; box-sizing:border-box; margin:0; transition:border-color .15s, box-shadow .15s, transform .1s; box-shadow:0 1px 2px rgba(16,24,40,.04); }
