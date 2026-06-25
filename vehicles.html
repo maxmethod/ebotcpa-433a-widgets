@@ -62,7 +62,7 @@
      box narrows. 900px survey = 3 cols (a 5-field add-box wraps to two rows); tablet = 2;
      portrait phone (~330px box) = 1 vertical column. So it can't produce a cramped row at
      any width, and there's no viewport media query to disagree with the container. */
-  .ar-field-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px 16px; margin-bottom: 12px; }
+  .ar-field-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--ar-col-min, 240px), 1fr)); gap: 14px 16px; margin-bottom: 12px; }
   /* Each cell is a flex column packed to the bottom: inputs bottom-align across a row even
      when one label wraps to two lines, while every label stays flush above its own input
      (the label is bound to its field by proximity only, so don't let it detach). */
@@ -226,6 +226,12 @@
   // can coexist on one page); fall back to document for standalone preview.
   var mount = (widgetEl || document).querySelector('.ar-container');
   var RID = 0;
+
+  // Per-widget column density: a widget can ask for wider columns (fewer per row) by setting
+  // CONFIG.colMin (or window[configGlobal].colMin) — e.g. Real Property uses 2 columns because
+  // its title/location/lender fields are long. Unset keeps the default 240px / ~3-col layout.
+  var COLMIN = OVR.colMin || CONFIG.colMin;
+  if (COLMIN && mount && mount.style) mount.style.setProperty('--ar-col-min', COLMIN);
 
   function escapeHtml(s) {
     if (s == null) return '';

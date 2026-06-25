@@ -62,7 +62,7 @@ const WIDGETS = {
   'real-property.html': {
     title: '433-A — Real Property Repeater', container: 'real-property-433a-widget', keyComment: '433a__real_property_summary',
     config: {
-      containerId: 'real-property-433a-widget', configGlobal: 'REALPROP_433A_CONFIG',
+      containerId: 'real-property-433a-widget', configGlobal: 'REALPROP_433A_CONFIG', colMin: '320px',
       sections: [{
         key: '433a__real_property_summary', title: 'Real Property',
         subtitle: 'Houses, condos, co-ops, time shares, land, etc. you own, are purchasing, or hold an interest in (including life estates).',
