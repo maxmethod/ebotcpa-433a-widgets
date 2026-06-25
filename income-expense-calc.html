@@ -162,6 +162,31 @@
     try { setVal(el, val); } finally { suppress = false; }
   }
 
+  // ---------- net difference (IRS 433-A Line 51 = total income − total expenses) ----------
+  // Writes the new TEXT field "433A Line 51 - Net Difference Auto" (id oxbZvGjxxesuTo8NYNb4).
+  // Must be TEXT — the legacy MONETARY 433a_line_50__net_difference drops a programmatic write.
+  var NET = { totalQ: '433a_line_51_-_net_difference_auto', altQ: '433a_line_51__net_difference_auto', cardId: 'mm-433a-net-card', title: 'Net Difference (Line 51)' };
+  function netEl() { return byQ(NET.totalQ) || byQ(NET.altQ) || document.querySelector('[name="' + NET.altQ + '"]'); }
+  function netTotal() { return r2(computeGroup(GROUPS[0]).total - computeGroup(GROUPS[1]).total); }
+  function renderNet() {
+    var anchor = netEl(); if (!anchor) return;
+    var slide = anchor.closest('[class*="slide-no-"]') || anchor.parentNode;
+    var c = slide.querySelector('#' + NET.cardId);
+    if (!c) { c = document.createElement('div'); c.id = NET.cardId; c.className = 'mm-calc-card'; slide.appendChild(c); }
+    var inc = computeGroup(GROUPS[0]).total, exp = computeGroup(GROUPS[1]).total, net = r2(inc - exp);
+    c.innerHTML = '<h4>' + esc(NET.title) + '</h4>' +
+      '<div class="mm-row"><span class="lbl">Total Monthly Income</span><span class="amt">' + money(inc) + '</span></div>' +
+      '<div class="mm-row"><span class="lbl">Total Monthly Expenses</span><span class="amt">&minus;' + money(exp) + '</span></div>' +
+      '<div class="mm-total"><span class="lbl">Net Difference</span><span class="amt">' + money(net) + '</span></div>';
+  }
+  function writeNet() {
+    var el = netEl(); if (!el) return;
+    var val = money(netTotal());
+    if (lastWrite[NET.totalQ] === val) return;
+    lastWrite[NET.totalQ] = val;
+    suppress = true; try { setVal(el, val); } finally { suppress = false; }
+  }
+
   // ---------- run ----------
   // Render the live cards on every keystroke (DISPLAY ONLY), but DEBOUNCE the
   // write-back of the totals into the GHL Total fields. Writing a GHL field on
@@ -170,8 +195,8 @@
   // several times). Deferring the write removes that race; totals still save
   // 400ms after a pause, on blur (change), and on Next/Submit.
   var writeTimer = null;
-  function renderAll() { GROUPS.forEach(function (g) { render(g, computeGroup(g)); }); }
-  function flushWrite()    { clearTimeout(writeTimer); GROUPS.forEach(function (g) { writeBack(g, computeGroup(g)); }); }
+  function renderAll() { GROUPS.forEach(function (g) { render(g, computeGroup(g)); }); renderNet(); }
+  function flushWrite()    { clearTimeout(writeTimer); GROUPS.forEach(function (g) { writeBack(g, computeGroup(g)); }); writeNet(); }
   function scheduleWrite() { clearTimeout(writeTimer); writeTimer = setTimeout(flushWrite, 400); }
   function onEdit(e) { if (suppress) return; if (e.target && e.target.getAttribute && e.target.getAttribute('data-q')) { renderAll(); scheduleWrite(); } }
   document.addEventListener('input',  onEdit, true);
