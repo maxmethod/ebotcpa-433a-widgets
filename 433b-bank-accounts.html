@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-A — Investments Repeater</title>
+<title>433-B — Bank Accounts Repeater</title>
 <!--
   SOURCE FILE — build input for scripts/build-embed.js.
   Config-driven repeater engine: only the CONFIG object at the bottom changes
   between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433a-widget#investments-433a-widget). Do not hand-edit dist/*.js.
+  #bank-433b-widget#bank-433b-widget). Do not hand-edit dist/*.js.
 
-  Header text matches Form 433-A (Rev. 6-2026) Section 4 — Personal Asset Information.
-  Writes LARGE_TEXT field by clean key: 433a__investments_summary
+  Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
+  Writes LARGE_TEXT field(s) by clean key: 433b__bank_accounts_summary
 -->
 <style>
   :root {
@@ -100,24 +100,57 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    containerId: 'investments-433a-widget',
-    configGlobal: 'INVESTMENTS_433A_CONFIG',
-    sections: [
+    "containerId": "bank-433b-widget",
+    "configGlobal": "BANK_433B_CONFIG",
+    "sections": [
       {
-        key: '433a__investments_summary',
-        title: 'Investments',
-        subtitle: 'Stocks, bonds, mutual funds, stock options, CDs, retirement (IRA/Keogh/401(k)), commodities, and business interests.',
-        addLabel: 'Add an investment', addBtn: 'Add investment',
-        gateWarn: 'Enter the type of investment before adding.',
-        emptyNote: 'No investments added yet.',
-        totalLabel: 'Total equity (value − loans)', totalCol: 'equity',
-        columns: [
-          { id: 'type',    label: 'Type of investment',     kind: 'text',  ph: 'e.g. 401(k), IRA, Brokerage', gate: true, role: 'name' },
-          { id: 'company', label: 'Company name & address',  kind: 'text',  ph: 'Name, street, city, state, ZIP', slabel: 'Company', role: 'meta' },
-          { id: 'phone',   label: 'Company phone',           kind: 'text',  ph: '(000) 000-0000', slabel: 'Phone' },
-          { id: 'value',   label: 'Current value',           kind: 'money', slabel: 'Value' },
-          { id: 'loan',    label: 'Loan balance (if any)',   kind: 'money', slabel: 'Loan' },
-          { id: 'equity',  label: 'Equity',                  kind: 'calc',  sub: ['value', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
+        "key": "433b__bank_accounts_summary",
+        "title": "Bank Accounts",
+        "subtitle": "Business checking, savings, money market, and online / stored-value accounts — list every institution (IRS Form 433-B, line 17).",
+        "addLabel": "Add a bank / account",
+        "addBtn": "Add account",
+        "gateWarn": "Enter the institution name before adding.",
+        "emptyNote": "No accounts added yet.",
+        "totalLabel": "Total cash in banks",
+        "totalCol": "balance",
+        "columns": [
+          {
+            "id": "institution",
+            "label": "Bank / institution name & address",
+            "kind": "text",
+            "ph": "Name, street, city, state, ZIP",
+            "gate": true,
+            "role": "name"
+          },
+          {
+            "id": "type",
+            "label": "Type of account",
+            "kind": "text",
+            "ph": "Checking, Savings, MMA…",
+            "slabel": "Type",
+            "role": "meta"
+          },
+          {
+            "id": "acct",
+            "label": "Account number",
+            "kind": "text",
+            "ph": "Acct. no",
+            "slabel": "Acct"
+          },
+          {
+            "id": "asof",
+            "label": "Balance as of (date)",
+            "kind": "text",
+            "ph": "MM/DD/YYYY",
+            "slabel": "As of"
+          },
+          {
+            "id": "balance",
+            "label": "Account balance",
+            "kind": "money",
+            "slabel": "Balance",
+            "role": "amount"
+          }
         ]
       }
     ]

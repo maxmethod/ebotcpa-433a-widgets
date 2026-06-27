@@ -500,6 +500,8 @@
   //   column.role: 'name' | 'meta' | 'amount'  (drives the summary card)
   //   column.slabel: label used in the saved pipe summary
   //   section.totalCol: the money/calc column summed for the total line
+  //   section.noTotal: true -> omit the trailing total line (pure-list classes:
+  //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
     containerId: 'investments-433a-widget',
@@ -659,7 +661,7 @@
       });
       return parts.join(' | ');
     });
-    lines.push('— ' + (sec.totalLabel || 'Total') + ': ' + money(totalOf(sec)));
+    if (!sec.noTotal) lines.push('— ' + (sec.totalLabel || 'Total') + ': ' + money(totalOf(sec))); // noTotal: pure-list classes have no meaningful $ total line
     return lines.join('\n');
   }
 
@@ -681,7 +683,7 @@
     sec._els.list.querySelectorAll('[data-rm]').forEach(function (b) {
       b.onclick = function () { sec._state = sec._state.filter(function (r) { return r._id !== b.dataset.rm; }); render(sec, true); };
     });
-    if (sec._els.total) { sec._els.total.style.display = n > 0 ? 'flex' : 'none'; sec._els.totalVal.textContent = money(totalOf(sec)); }
+    if (sec._els.total) { sec._els.total.style.display = (!sec.noTotal && n > 0) ? 'flex' : 'none'; if (!sec.noTotal) sec._els.totalVal.textContent = money(totalOf(sec)); } // noTotal: never show or compute a total (totalCol may be absent)
     sec._els.box.style.display = n >= MAX ? 'none' : 'block';
     if (write) setAll(sec.key, buildSummary(sec));
   }

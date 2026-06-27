@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-A — Investments Repeater</title>
+<title>433-B — Digital Assets Repeater</title>
 <!--
   SOURCE FILE — build input for scripts/build-embed.js.
   Config-driven repeater engine: only the CONFIG object at the bottom changes
   between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433a-widget#investments-433a-widget). Do not hand-edit dist/*.js.
+  #digital-433b-widget#digital-433b-widget). Do not hand-edit dist/*.js.
 
-  Header text matches Form 433-A (Rev. 6-2026) Section 4 — Personal Asset Information.
-  Writes LARGE_TEXT field by clean key: 433a__investments_summary
+  Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
+  Writes LARGE_TEXT field(s) by clean key: 433b__digital_assets_summary
 -->
 <style>
   :root {
@@ -100,24 +100,82 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    containerId: 'investments-433a-widget',
-    configGlobal: 'INVESTMENTS_433A_CONFIG',
-    sections: [
+    "containerId": "digital-433b-widget",
+    "configGlobal": "DIGITAL_433B_CONFIG",
+    "colMin": "320px",
+    "sections": [
       {
-        key: '433a__investments_summary',
-        title: 'Investments',
-        subtitle: 'Stocks, bonds, mutual funds, stock options, CDs, retirement (IRA/Keogh/401(k)), commodities, and business interests.',
-        addLabel: 'Add an investment', addBtn: 'Add investment',
-        gateWarn: 'Enter the type of investment before adding.',
-        emptyNote: 'No investments added yet.',
-        totalLabel: 'Total equity (value − loans)', totalCol: 'equity',
-        columns: [
-          { id: 'type',    label: 'Type of investment',     kind: 'text',  ph: 'e.g. 401(k), IRA, Brokerage', gate: true, role: 'name' },
-          { id: 'company', label: 'Company name & address',  kind: 'text',  ph: 'Name, street, city, state, ZIP', slabel: 'Company', role: 'meta' },
-          { id: 'phone',   label: 'Company phone',           kind: 'text',  ph: '(000) 000-0000', slabel: 'Phone' },
-          { id: 'value',   label: 'Current value',           kind: 'money', slabel: 'Value' },
-          { id: 'loan',    label: 'Loan balance (if any)',   kind: 'money', slabel: 'Loan' },
-          { id: 'equity',  label: 'Equity',                  kind: 'calc',  sub: ['value', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
+        "key": "433b__digital_assets_summary",
+        "title": "Digital Assets",
+        "subtitle": "Virtual currency (cryptocurrency), NFTs, and other digital assets held by the business (IRS Form 433-B, line 20). List individuals with access to keys/wallets in the separate field on this page.",
+        "addLabel": "Add a digital asset",
+        "addBtn": "Add digital asset",
+        "gateWarn": "Enter the digital asset before adding.",
+        "emptyNote": "No digital assets added yet.",
+        "totalLabel": "Total equity of digital assets",
+        "totalCol": "equity",
+        "columns": [
+          {
+            "id": "asset",
+            "label": "Digital asset, # of units & address",
+            "kind": "text",
+            "ph": "e.g. 1.5 BTC, wallet address",
+            "gate": true,
+            "role": "name"
+          },
+          {
+            "id": "location",
+            "label": "Location (exchange acct / self-hosted wallet)",
+            "kind": "text",
+            "ph": "Exchange or wallet",
+            "slabel": "Location",
+            "role": "meta"
+          },
+          {
+            "id": "acct",
+            "label": "Account # (custodian / broker)",
+            "kind": "text",
+            "ph": "Acct. no",
+            "slabel": "Acct"
+          },
+          {
+            "id": "collateral",
+            "label": "Used as collateral? (Yes/No)",
+            "kind": "text",
+            "ph": "Yes / No",
+            "slabel": "Collateral"
+          },
+          {
+            "id": "value",
+            "label": "Current value (USD)",
+            "kind": "money",
+            "slabel": "Value"
+          },
+          {
+            "id": "value_asof",
+            "label": "Current value as of (date)",
+            "kind": "text",
+            "ph": "MM/DD/YYYY",
+            "slabel": "Value as of"
+          },
+          {
+            "id": "loan",
+            "label": "Loan balance",
+            "kind": "money",
+            "slabel": "Loan"
+          },
+          {
+            "id": "equity",
+            "label": "Equity",
+            "kind": "calc",
+            "sub": [
+              "value",
+              "loan"
+            ],
+            "floor": true,
+            "slabel": "Equity",
+            "role": "amount"
+          }
         ]
       }
     ]

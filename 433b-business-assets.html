@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-A — Investments Repeater</title>
+<title>433-B — Business Equipment & Intangible Assets Repeater</title>
 <!--
   SOURCE FILE — build input for scripts/build-embed.js.
   Config-driven repeater engine: only the CONFIG object at the bottom changes
   between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433a-widget#investments-433a-widget). Do not hand-edit dist/*.js.
+  #bizassets-433b-widget#bizassets-433b-widget). Do not hand-edit dist/*.js.
 
-  Header text matches Form 433-A (Rev. 6-2026) Section 4 — Personal Asset Information.
-  Writes LARGE_TEXT field by clean key: 433a__investments_summary
+  Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
+  Writes LARGE_TEXT field(s) by clean key: 433b__business_equipment_summary + 433b__intangible_assets_summary
 -->
 <style>
   :root {
@@ -100,24 +100,116 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    containerId: 'investments-433a-widget',
-    configGlobal: 'INVESTMENTS_433A_CONFIG',
-    sections: [
+    "containerId": "bizassets-433b-widget",
+    "configGlobal": "BIZASSETS_433B_CONFIG",
+    "colMin": "320px",
+    "sections": [
       {
-        key: '433a__investments_summary',
-        title: 'Investments',
-        subtitle: 'Stocks, bonds, mutual funds, stock options, CDs, retirement (IRA/Keogh/401(k)), commodities, and business interests.',
-        addLabel: 'Add an investment', addBtn: 'Add investment',
-        gateWarn: 'Enter the type of investment before adding.',
-        emptyNote: 'No investments added yet.',
-        totalLabel: 'Total equity (value − loans)', totalCol: 'equity',
-        columns: [
-          { id: 'type',    label: 'Type of investment',     kind: 'text',  ph: 'e.g. 401(k), IRA, Brokerage', gate: true, role: 'name' },
-          { id: 'company', label: 'Company name & address',  kind: 'text',  ph: 'Name, street, city, state, ZIP', slabel: 'Company', role: 'meta' },
-          { id: 'phone',   label: 'Company phone',           kind: 'text',  ph: '(000) 000-0000', slabel: 'Phone' },
-          { id: 'value',   label: 'Current value',           kind: 'money', slabel: 'Value' },
-          { id: 'loan',    label: 'Loan balance (if any)',   kind: 'money', slabel: 'Loan' },
-          { id: 'equity',  label: 'Equity',                  kind: 'calc',  sub: ['value', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
+        "key": "433b__business_equipment_summary",
+        "title": "Business Equipment & Tangible Assets",
+        "subtitle": "Machinery, equipment, merchandise inventory, and other tangible business assets (IRS Form 433-B, lines 24a–24d).",
+        "addLabel": "Add equipment / tangible asset",
+        "addBtn": "Add asset",
+        "gateWarn": "Enter an asset description before adding.",
+        "emptyNote": "No business equipment added yet.",
+        "totalLabel": "Total equity (FMV − loans)",
+        "totalCol": "equity",
+        "columns": [
+          {
+            "id": "description",
+            "label": "Asset description",
+            "kind": "text",
+            "ph": "e.g. CNC machine, delivery fleet",
+            "gate": true,
+            "role": "name"
+          },
+          {
+            "id": "location",
+            "label": "Location (street, city, state, ZIP, county)",
+            "kind": "text",
+            "ph": "Where it is kept",
+            "slabel": "Location",
+            "role": "meta"
+          },
+          {
+            "id": "lender",
+            "label": "Lender / lessor (name, address, phone)",
+            "kind": "text",
+            "ph": "Name, address, phone",
+            "slabel": "Lender"
+          },
+          {
+            "id": "purchasedate",
+            "label": "Purchase / lease date",
+            "kind": "text",
+            "ph": "MM/DD/YYYY",
+            "slabel": "Purchased"
+          },
+          {
+            "id": "finalpayment",
+            "label": "Date of final payment",
+            "kind": "text",
+            "ph": "MM/DD/YYYY",
+            "slabel": "Final pmt"
+          },
+          {
+            "id": "fmv",
+            "label": "Current fair market value",
+            "kind": "money",
+            "slabel": "FMV"
+          },
+          {
+            "id": "loan",
+            "label": "Current loan balance",
+            "kind": "money",
+            "slabel": "Loan"
+          },
+          {
+            "id": "payment",
+            "label": "Monthly payment",
+            "kind": "money",
+            "slabel": "Monthly"
+          },
+          {
+            "id": "equity",
+            "label": "Equity",
+            "kind": "calc",
+            "sub": [
+              "fmv",
+              "loan"
+            ],
+            "floor": true,
+            "slabel": "Equity",
+            "role": "amount"
+          }
+        ]
+      },
+      {
+        "key": "433b__intangible_assets_summary",
+        "title": "Intangible Assets",
+        "subtitle": "Intangible assets — licenses, patents, domain names, trademarks, goodwill (IRS Form 433-B, lines 24e–24g).",
+        "addLabel": "Add an intangible asset",
+        "addBtn": "Add intangible",
+        "gateWarn": "Enter a description before adding.",
+        "emptyNote": "No intangible assets added yet.",
+        "totalLabel": "Total equity",
+        "totalCol": "equity",
+        "columns": [
+          {
+            "id": "description",
+            "label": "Intangible asset description (license, patent, domain, goodwill…)",
+            "kind": "text",
+            "ph": "Describe the intangible asset",
+            "gate": true,
+            "role": "name"
+          },
+          {
+            "id": "equity",
+            "label": "Equity",
+            "kind": "money",
+            "slabel": "Equity",
+            "role": "amount"
+          }
         ]
       }
     ]

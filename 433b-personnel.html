@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-A — Investments Repeater</title>
+<title>433-B — Business Personnel Repeater</title>
 <!--
   SOURCE FILE — build input for scripts/build-embed.js.
   Config-driven repeater engine: only the CONFIG object at the bottom changes
   between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433a-widget#investments-433a-widget). Do not hand-edit dist/*.js.
+  #personnel-433b-widget#personnel-433b-widget). Do not hand-edit dist/*.js.
 
-  Header text matches Form 433-A (Rev. 6-2026) Section 4 — Personal Asset Information.
-  Writes LARGE_TEXT field by clean key: 433a__investments_summary
+  Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
+  Writes LARGE_TEXT field(s) by clean key: 433b__business_personnel_summary
 -->
 <style>
   :root {
@@ -100,24 +100,85 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    containerId: 'investments-433a-widget',
-    configGlobal: 'INVESTMENTS_433A_CONFIG',
-    sections: [
+    "containerId": "personnel-433b-widget",
+    "configGlobal": "PERSONNEL_433B_CONFIG",
+    "colMin": "320px",
+    "sections": [
       {
-        key: '433a__investments_summary',
-        title: 'Investments',
-        subtitle: 'Stocks, bonds, mutual funds, stock options, CDs, retirement (IRA/Keogh/401(k)), commodities, and business interests.',
-        addLabel: 'Add an investment', addBtn: 'Add investment',
-        gateWarn: 'Enter the type of investment before adding.',
-        emptyNote: 'No investments added yet.',
-        totalLabel: 'Total equity (value − loans)', totalCol: 'equity',
-        columns: [
-          { id: 'type',    label: 'Type of investment',     kind: 'text',  ph: 'e.g. 401(k), IRA, Brokerage', gate: true, role: 'name' },
-          { id: 'company', label: 'Company name & address',  kind: 'text',  ph: 'Name, street, city, state, ZIP', slabel: 'Company', role: 'meta' },
-          { id: 'phone',   label: 'Company phone',           kind: 'text',  ph: '(000) 000-0000', slabel: 'Phone' },
-          { id: 'value',   label: 'Current value',           kind: 'money', slabel: 'Value' },
-          { id: 'loan',    label: 'Loan balance (if any)',   kind: 'money', slabel: 'Loan' },
-          { id: 'equity',  label: 'Equity',                  kind: 'calc',  sub: ['value', 'loan'], floor: true, slabel: 'Equity', role: 'amount' }
+        "key": "433b__business_personnel_summary",
+        "title": "Business Personnel",
+        "noTotal": true,
+        "subtitle": "Partners, officers, major shareholders, and others responsible for the business (IRS Form 433-B, line 7).",
+        "addLabel": "Add a person",
+        "addBtn": "Add person",
+        "gateWarn": "Enter the full name before adding.",
+        "emptyNote": "No personnel added yet.",
+        "columns": [
+          {
+            "id": "name",
+            "label": "Full name",
+            "kind": "text",
+            "ph": "First & last name",
+            "gate": true,
+            "role": "name"
+          },
+          {
+            "id": "title",
+            "label": "Title",
+            "kind": "text",
+            "ph": "e.g. President, Partner",
+            "slabel": "Title",
+            "role": "meta"
+          },
+          {
+            "id": "address",
+            "label": "Home address (street, city, state, ZIP)",
+            "kind": "text",
+            "ph": "Full home address",
+            "slabel": "Address"
+          },
+          {
+            "id": "payrolltax",
+            "label": "Responsible for depositing payroll taxes? (Yes/No)",
+            "kind": "text",
+            "ph": "Yes / No",
+            "slabel": "Payroll tax"
+          },
+          {
+            "id": "tin",
+            "label": "Taxpayer ID number",
+            "kind": "text",
+            "ph": "SSN / ITIN / EIN",
+            "slabel": "TIN"
+          },
+          {
+            "id": "homephone",
+            "label": "Home phone",
+            "kind": "text",
+            "ph": "(000) 000-0000",
+            "slabel": "Home"
+          },
+          {
+            "id": "workphone",
+            "label": "Work / cell phone",
+            "kind": "text",
+            "ph": "(000) 000-0000",
+            "slabel": "Work"
+          },
+          {
+            "id": "ownership",
+            "label": "Ownership % & shares/interest",
+            "kind": "text",
+            "ph": "e.g. 40% / 400 shares",
+            "slabel": "Ownership"
+          },
+          {
+            "id": "salary",
+            "label": "Annual salary / draw",
+            "kind": "text",
+            "ph": "e.g. $120,000",
+            "slabel": "Salary"
+          }
         ]
       }
     ]
