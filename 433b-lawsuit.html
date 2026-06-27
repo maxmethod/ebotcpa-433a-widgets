@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-B — Investments Repeater</title>
+<title>433-B — Lawsuit Detail Repeater</title>
 <!--
   SOURCE FILE — build input for scripts/build-embed.js.
   Config-driven repeater engine: only the CONFIG object at the bottom changes
   between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433b-widget#investments-433b-widget). Do not hand-edit dist/*.js.
+  #lawsuit-433b-widget#lawsuit-433b-widget). Do not hand-edit dist/*.js.
 
   Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
-  Writes LARGE_TEXT field(s) by clean key: 433b__investments_summary
+  Writes LARGE_TEXT field(s) by clean key: 433b_s3__lawsuit_detail
 -->
 <style>
   :root {
@@ -100,67 +100,78 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    "containerId": "investments-433b-widget",
-    "configGlobal": "INVESTMENTS_433B_CONFIG",
+    "containerId": "lawsuit-433b-widget",
+    "configGlobal": "LAWSUIT_433B_CONFIG",
+    "colMin": "320px",
     "sections": [
       {
-        "key": "433b__investments_summary",
-        "id": "aZz6KIIVMQUxRwD943zC",
-        "title": "Investments",
-        "subtitle": "Stocks, bonds, mutual funds, stock options, certificates of deposit, and other business investments (IRS Form 433-B, line 19).",
-        "addLabel": "Add an investment",
-        "addBtn": "Add investment",
-        "gateWarn": "Enter the company name before adding.",
-        "emptyNote": "No investments added yet.",
-        "totalLabel": "Total investments",
-        "totalCol": "equity",
+        "key": "433b_s3__lawsuit_detail",
+        "id": "78CDwQe1HY2JfEEPvO76",
+        "title": "Lawsuits",
+        "noTotal": true,
+        "subtitle": "Each lawsuit the business is a party to (IRS Form 433-B, line 9).",
+        "addLabel": "Add a lawsuit",
+        "addBtn": "Add lawsuit",
+        "gateWarn": "Enter the plaintiff before adding.",
+        "emptyNote": "No lawsuits added yet.",
         "columns": [
           {
-            "id": "name",
-            "label": "Company name & address",
+            "id": "plaintiff",
+            "label": "Plaintiff",
             "kind": "text",
-            "ph": "Name, street, city, state, ZIP",
+            "ph": "Plaintiff name",
             "gate": true,
             "role": "name"
           },
           {
-            "id": "phone",
-            "label": "Phone",
+            "id": "defendant",
+            "label": "Defendant",
             "kind": "text",
-            "ph": "(000) 000-0000",
-            "slabel": "Phone",
+            "ph": "Defendant name",
+            "slabel": "Defendant",
             "role": "meta"
           },
           {
-            "id": "collateral",
-            "label": "Used as collateral on a loan? (Yes/No)",
+            "id": "location",
+            "label": "Location of filing (court)",
             "kind": "text",
-            "ph": "Yes / No",
-            "slabel": "Collateral"
+            "ph": "Court / jurisdiction",
+            "slabel": "Location"
           },
           {
-            "id": "value",
-            "label": "Current value",
+            "id": "represented",
+            "label": "Represented by",
+            "kind": "text",
+            "ph": "Attorney name & firm",
+            "slabel": "Counsel"
+          },
+          {
+            "id": "docket",
+            "label": "Docket / case no.",
+            "kind": "text",
+            "ph": "Case number",
+            "slabel": "Docket"
+          },
+          {
+            "id": "amount",
+            "label": "Amount of suit",
             "kind": "money",
-            "slabel": "Value"
-          },
-          {
-            "id": "loan",
-            "label": "Loan balance",
-            "kind": "money",
-            "slabel": "Loan"
-          },
-          {
-            "id": "equity",
-            "label": "Equity",
-            "kind": "calc",
-            "sub": [
-              "value",
-              "loan"
-            ],
-            "floor": true,
-            "slabel": "Equity",
+            "slabel": "Amount",
             "role": "amount"
+          },
+          {
+            "id": "completion",
+            "label": "Possible completion date",
+            "kind": "text",
+            "ph": "MM/DD/YYYY",
+            "slabel": "Completion"
+          },
+          {
+            "id": "subject",
+            "label": "Subject of suit",
+            "kind": "text",
+            "ph": "What the suit is about",
+            "slabel": "Subject"
           }
         ]
       }

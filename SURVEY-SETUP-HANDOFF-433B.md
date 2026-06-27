@@ -12,6 +12,20 @@ Pin to **`@v3.7.0`** once published. jsDelivr base: `cdn.jsdelivr.net/gh/maxmeth
 
 ---
 
+## 📍 Status (EOD 2026-06-27) & tomorrow
+
+- **Widgets:** ✅ published **`v3.7.0`** (commit `e0423cf`) — jsDelivr serving all embeds.
+- **Module slide-out 433-B tab:** ✅ editable modals deployed (`ebotcpa-contact-module` rev `00016-gbc`, us-central1, 100% traffic; health-checked). The 16 asset/list summaries now have **Manage / + Add** modals that write the Company (business) object; the single fields stay read-only. A row added here is byte-identical to a survey-added row.
+- ⚠️ **The live business-object write is NOT yet smoke-tested** — confirm it persists before relying on it (step 1 below).
+
+**Tomorrow's checklist:**
+1. **Smoke-test the business write.** Open the 433-B tab for a contact with a linked Company (test contact `wb9IQFZYbSTDtp5dISlr`). On any asset summary click **+ Add**, add a row, Save → reload the tab and confirm it persisted (and shows on the Company record in GHL). **If it does NOT persist:** the fix is one line — in `ebotcpa-contact-module/src/lib/ghl.ts` `updateBusinessFields`, prefix the property keys with `business.` (the records API may expect `business.433b__…` rather than the bare key), then redeploy.
+2. **Build the 433-B survey** targeting the **business object** (the Schedule C survey proves this works) — one embed per slide per the table below; the income side gets the calc.
+3. **Confirm the calc binding** on the live survey (open the income slide's console — it resolves by customFieldId or data-q; it's dual-bound either way).
+4. **Walk the published survey:** every list slide shows its widget, no slide skips, totals populate, and a survey-added row renders identically in the module's 433-B tab.
+
+---
+
 ## ✅ TARGET CONFIG — one Custom-Code block per slide
 
 **Rule: ONE Custom-Code block per list slide** = a `<div id="…">` + its `<script>`. **No unified bundle** (433-B ships per-page embeds only — there is no `embed-433b.js`). Each `<div>` carries the brand color: `data-primary-color="{{custom_values.brand_primary_color}}"`.

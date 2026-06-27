@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-B — Investments Repeater</title>
+<title>433-B — Bankruptcy Detail Repeater</title>
 <!--
   SOURCE FILE — build input for scripts/build-embed.js.
   Config-driven repeater engine: only the CONFIG object at the bottom changes
   between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433b-widget#investments-433b-widget). Do not hand-edit dist/*.js.
+  #bankruptcy-433b-widget#bankruptcy-433b-widget). Do not hand-edit dist/*.js.
 
   Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
-  Writes LARGE_TEXT field(s) by clean key: 433b__investments_summary
+  Writes LARGE_TEXT field(s) by clean key: 433b_s3__bankruptcy_detail
 -->
 <style>
   :root {
@@ -100,67 +100,57 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    "containerId": "investments-433b-widget",
-    "configGlobal": "INVESTMENTS_433B_CONFIG",
+    "containerId": "bankruptcy-433b-widget",
+    "configGlobal": "BANKRUPTCY_433B_CONFIG",
+    "colMin": "320px",
     "sections": [
       {
-        "key": "433b__investments_summary",
-        "id": "aZz6KIIVMQUxRwD943zC",
-        "title": "Investments",
-        "subtitle": "Stocks, bonds, mutual funds, stock options, certificates of deposit, and other business investments (IRS Form 433-B, line 19).",
-        "addLabel": "Add an investment",
-        "addBtn": "Add investment",
-        "gateWarn": "Enter the company name before adding.",
-        "emptyNote": "No investments added yet.",
-        "totalLabel": "Total investments",
-        "totalCol": "equity",
+        "key": "433b_s3__bankruptcy_detail",
+        "id": "cajANacZoQg6Y1DeiR53",
+        "title": "Bankruptcy Filings",
+        "noTotal": true,
+        "subtitle": "Each bankruptcy the business has filed (IRS Form 433-B, line 10).",
+        "addLabel": "Add a bankruptcy filing",
+        "addBtn": "Add filing",
+        "gateWarn": "Enter the date filed before adding.",
+        "emptyNote": "No bankruptcy filings added yet.",
         "columns": [
           {
-            "id": "name",
-            "label": "Company name & address",
+            "id": "datefiled",
+            "label": "Date filed",
             "kind": "text",
-            "ph": "Name, street, city, state, ZIP",
+            "ph": "MM/DD/YYYY",
             "gate": true,
             "role": "name"
           },
           {
-            "id": "phone",
-            "label": "Phone",
+            "id": "datedismissed",
+            "label": "Date dismissed",
             "kind": "text",
-            "ph": "(000) 000-0000",
-            "slabel": "Phone",
+            "ph": "MM/DD/YYYY",
+            "slabel": "Dismissed",
             "role": "meta"
           },
           {
-            "id": "collateral",
-            "label": "Used as collateral on a loan? (Yes/No)",
+            "id": "datedischarged",
+            "label": "Date discharged",
             "kind": "text",
-            "ph": "Yes / No",
-            "slabel": "Collateral"
+            "ph": "MM/DD/YYYY",
+            "slabel": "Discharged"
           },
           {
-            "id": "value",
-            "label": "Current value",
-            "kind": "money",
-            "slabel": "Value"
+            "id": "petition",
+            "label": "Petition no.",
+            "kind": "text",
+            "ph": "Petition number",
+            "slabel": "Petition"
           },
           {
-            "id": "loan",
-            "label": "Loan balance",
-            "kind": "money",
-            "slabel": "Loan"
-          },
-          {
-            "id": "equity",
-            "label": "Equity",
-            "kind": "calc",
-            "sub": [
-              "value",
-              "loan"
-            ],
-            "floor": true,
-            "slabel": "Equity",
-            "role": "amount"
+            "id": "district",
+            "label": "District of filing",
+            "kind": "text",
+            "ph": "Court district",
+            "slabel": "District"
           }
         ]
       }

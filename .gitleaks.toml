@@ -1,0 +1,16 @@
+# Gitleaks config for ebotcpa-433a-widgets.
+# Keeps the FULL default ruleset, and only allowlists a known class of false positives:
+# GHL custom-field KEYS (e.g. 433b_s3__lawsuit_detail, 433b__bank_accounts_summary). These are
+# public field identifiers — they appear verbatim in the survey DOM and in the embed JS that is
+# served publicly via jsDelivr — so they are not secrets. The default `generic-api-key` rule trips
+# on the longer ones by entropy. The allowlist regex is anchored, so the WHOLE detected string
+# must be a 433a/433b field key to be allowed; a real token (sk_live_…, a PIT, etc.) will not match.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "GHL 433-A/433-B custom-field keys are public identifiers, not secrets."
+regexTarget = "secret"
+regexes = [
+  '''^433[ab][a-z0-9_]+$''',
+]

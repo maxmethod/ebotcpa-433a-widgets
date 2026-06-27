@@ -105,6 +105,7 @@
     "sections": [
       {
         "key": "433b__available_credit_summary",
+        "id": "4ftsjKqYOo5woTOmcg0Q",
         "title": "Available Credit",
         "subtitle": "All lines of credit and business-issued credit cards (IRS Form 433-B, line 21).",
         "addLabel": "Add a line of credit",
@@ -252,10 +253,24 @@
   // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
   // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
   // it appends to <body>, never hides the native field, and never writes the summary back.
+  // Field-id match (MOST robust, preferred): GHL renders the host field as
+  // <textarea name="<fieldId>" id="<fieldId>">, and the survey data-q is derived from the
+  // field's DISPLAY NAME — NOT its fieldKey. So a friendly rename ("Business Bank Accounts")
+  // makes data-q "433b_-_business_bank_accounts" and key/data-q matching MISSES the host.
+  // When CONFIG supplies the GHL field id per section (`id`), match on it first (rename-proof,
+  // exactly how the income/expense calc binds). Falls back to clean-key/data-q forms when no
+  // id is given (so 433-A configs without `id` behave unchanged).
+  function idForKey(key) {
+    try { for (var i = 0; i < CONFIG.sections.length; i++) { var s = CONFIG.sections[i]; if (s.key === key && s.id) return s.id; } } catch (e) {}
+    return null;
+  }
   function hostSel(key, live) {
     var suf = live ? ':not([data-ar-fallback])' : '';
     var dash = key.replace(/__/g, '_-_');
-    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    var sel = [];
+    var fid = idForKey(key);
+    if (fid) sel.push('[name="' + fid + '"]' + suf, '[id="' + fid + '"]' + suf);
+    sel.push('[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf);
     if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
     return sel.join(', ');
   }

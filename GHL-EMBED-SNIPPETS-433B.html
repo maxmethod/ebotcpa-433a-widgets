@@ -1,0 +1,134 @@
+<!-- =====================================================================
+     ebotCPA 433-B WIDGETS — GHL EMBED SNIPPETS  (copy-paste build sheet)
+     Form 433-B (Rev. 6-2026), Collection Information Statement for Businesses.
+     Pin to the published tag: @v3.8.0.  Base: cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets
+     (the "433a-widgets" in the repo/URL is cosmetic — one shared engine hosts both forms.)
+     =====================================================================
+
+  ┌──────────────────────────────────────────────────────────────────────────┐
+  │ TARGET OBJECT = BUSINESS (Company).  The 433-B fields live on the native    │
+  │ Company object (folder 3t6f2NkRurqaRD3ET9om, loc iQ5GwlNz7ISfYopdpBUG).     │
+  │ Build the survey to write the business object (the Schedule C survey proves │
+  │ business-object surveys work). Each list slide must contain its native      │
+  │ LARGE_TEXT *_summary field — the widget hides it and renders in its place.  │
+  └──────────────────────────────────────────────────────────────────────────┘
+  RULE: one Custom-Code block per list slide = a <div id="…"> + its <script>.
+  NO unified bundle for 433-B (per-page embeds only; there is no embed-433b.js).
+  WHY per-page: GHL auto-SKIPS any slide whose only question is hidden. Each asset
+  slide holds just its one summary field, which the widget hides — the Custom-Code
+  block IS the visible element that keeps the slide alive + gives the widget its mount.
+  Each <div> carries the brand color via data-primary-color. -->
+
+
+<!-- ── L17 · BANK ACCOUNTS · writes 433b__bank_accounts_summary ───────────────── -->
+<div id="bank-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-bank-accounts.js"></script>
+
+<!-- ── L18 · ACCOUNTS / NOTES RECEIVABLE · writes 433b__accounts_receivable_summary ── -->
+<div id="ar-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-accounts-receivable.js"></script>
+
+<!-- ── L19 · INVESTMENTS · writes 433b__investments_summary ───────────────────── -->
+<div id="investments-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-investments.js"></script>
+
+<!-- ── L20 · DIGITAL ASSETS · writes 433b__digital_assets_summary ──────────────────
+     ⚠ ALSO put the SEPARATE single field 433b__digital_asset_keyholders (TEXT, L20a —
+     "individuals with access to keys/wallets") on THIS slide as its own normal field.
+     It is NOT part of the repeater. -->
+<div id="digital-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-digital-assets.js"></script>
+
+<!-- ── L21 · AVAILABLE CREDIT · writes 433b__available_credit_summary ──────────── -->
+<div id="credit-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-available-credit.js"></script>
+
+<!-- ── L22 · REAL PROPERTY · writes 433b__real_property_summary ────────────────── -->
+<div id="realprop-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-real-property.js"></script>
+
+<!-- ── L23 · VEHICLES · writes 433b__vehicles_summary ─────────────────────────── -->
+<div id="vehicle-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-vehicles.js"></script>
+
+<!-- ── L24a–g · BUSINESS EQUIPMENT + INTANGIBLES (ONE slide, TWO sections) ─────────
+     writes 433b__business_equipment_summary AND 433b__intangible_assets_summary.
+     ⚠ BOTH native fields MUST stay on this one slide — the widget renders both
+     sections here and hides both hosts. (Form line 24h = the sum of the two totals;
+     the downstream PDF/webhook mapper adds them.) -->
+<div id="bizassets-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-business-assets.js"></script>
+
+<!-- ── L25 · BUSINESS LIABILITIES · writes 433b__business_liabilities_summary ──── -->
+<div id="liabilities-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-business-liabilities.js"></script>
+
+<!-- ── L5 + L6 · PAYMENT PROCESSORS + CREDIT CARDS (ONE slide, TWO sections) ───────
+     writes 433b__payment_processors_summary AND 433b__credit_cards_summary.
+     ⚠ BOTH native fields MUST stay on this one slide (pure lists, no $ totals). -->
+<div id="payment-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-payment-acceptance.js"></script>
+
+<!-- ── L7 · BUSINESS PERSONNEL · writes 433b__business_personnel_summary (list) ── -->
+<div id="personnel-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-personnel.js"></script>
+
+<!-- ── L11 · RELATED-PARTY LOANS · writes 433b__related_party_loans_summary (list) ── -->
+<div id="loans-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-related-party-loans.js"></script>
+
+<!-- ── L12 · ASSET TRANSFERS · writes 433b__asset_transfers_summary (list) ─────── -->
+<div id="transfers-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-asset-transfers.js"></script>
+
+<!-- ── L13 · AFFILIATIONS · writes 433b__affiliations_summary (list) ───────────── -->
+<div id="affiliations-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-affiliations.js"></script>
+
+<!-- ── L9 · LAWSUIT · writes 433b_s3__lawsuit_detail (list) ─────────────────────────
+     Hosts the existing "433B - Lawsuit Detail" field. Gate (GHL conditional logic) to
+     show ONLY when "Party to a Lawsuit? = Yes", like the other Section-3 widgets. -->
+<div id="lawsuit-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-lawsuit.js"></script>
+
+<!-- ── L10 · BANKRUPTCY · writes 433b_s3__bankruptcy_detail (list) ──────────────────
+     Hosts the existing "433B - Bankruptcy Detail" field. Gate to show ONLY when
+     "Ever Filed Bankruptcy? = Yes". -->
+<div id="bankruptcy-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-bankruptcy.js"></script>
+
+<!-- ── SECTION 5 · INCOME / EXPENSE / NET live calc · NO div, paste ONCE ──────────
+     Field-anchored: it finds the income/expense/net fields wherever they are and
+     injects a live card on each of their slides, writing 3 TEXT totals on submit:
+       Income (L36)  = sum of 6 income lines  → 433b_income__total_monthly_auto
+       Expenses (L49)= sum of 12 expense lines→ 433b_expense__total_monthly_auto  (incl. L48 installments)
+       Net (L50)     = income − expenses      → 433b_line_50__net_income_auto
+     The 3 *_auto fields MUST be TEXT (GHL drops programmatic writes to currency-masked
+     MONETARY fields). The per-line inputs stay MONETARY (the client types those).
+     The two *_other_description fields are plain TEXT — NOT summed. -->
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.8.0/dist/embed-433b-income-expense-calc.js"></script>
+
+
+<!-- ─────────────────────────────────────────────────────────────────────────────
+     NATIVE *_summary fields each widget drives (LARGE_TEXT — add to the matching slide;
+     GHL renders the data-q as 433b_-_*_summary, the engine matches both forms):
+       433b__bank_accounts_summary · 433b__accounts_receivable_summary
+       433b__investments_summary · 433b__digital_assets_summary
+       433b__available_credit_summary · 433b__real_property_summary · 433b__vehicles_summary
+       433b__business_equipment_summary · 433b__intangible_assets_summary  (same slide)
+       433b__business_liabilities_summary
+       433b__payment_processors_summary · 433b__credit_cards_summary  (same slide)
+       433b__business_personnel_summary · 433b__related_party_loans_summary
+       433b__asset_transfers_summary · 433b__affiliations_summary
+     Separate single field on the Digital Assets slide: 433b__digital_asset_keyholders (TEXT, L20a).
+
+     CALC line fields (MONETARY, client types them):
+       income:  433b_income__{gross_receipts,gross_rental,interest,dividends,cash_receipts,other}
+       expense: 433b_expense__{materials,inventory,wages,rent,supplies,utilities_telephone,
+                vehicle_gas_oil,insurance,current_taxes,repairs,installment_payments,other}
+       text-only (not summed): 433b_income__other_description · 433b_expense__other_description
+
+     FALLBACK CDN (if jsDelivr is warming a fresh tag) — swap a <script> for its githack
+     twin, do NOT include both:
+       https://rawcdn.githack.com/maxmethod/ebotcpa-433a-widgets/v3.7.0/dist/<file>.js
+     ───────────────────────────────────────────────────────────────────────────── -->

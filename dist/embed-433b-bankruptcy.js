@@ -1,92 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>433-B — Investments Repeater</title>
-<!--
-  SOURCE FILE — build input for scripts/build-embed.js.
-  Config-driven repeater engine: only the CONFIG object at the bottom changes
-  between widgets. CSS is UNSCOPED on purpose (the build scopes it to
-  #investments-433b-widget#investments-433b-widget). Do not hand-edit dist/*.js.
+/**
+ * 433b-bankruptcy embed bootstrap
+ * Generated from 433b-bankruptcy.html by scripts/build-embed.js — do not hand-edit.
+ *
+ * Drop into a GHL form step (Custom Code element) with:
+ *   <div id="bankruptcy-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
+ *   <script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@vX.Y.Z/dist/embed-433b-bankruptcy.js"></script>
+ *
+ * Or omit the <div> and the script appends the widget to <body>.
+ */
+(function () {
+  if (window.__bankruptcy433bEmbedLoaded) return;
+  window.__bankruptcy433bEmbedLoaded = true;
 
-  Header text matches IRS Form 433-B (Rev. 6-2026) — Collection Information Statement for Businesses. Writes the BUSINESS (Company) object fields.
-  Writes LARGE_TEXT field(s) by clean key: 433b__investments_summary
--->
-<style>
-  :root {
+  // ---- styles ----
+  const style = document.createElement('style');
+  style.setAttribute('data-bankruptcy-433b', 'styles');
+  style.textContent = `:root {
     --ar-bg: #ffffff; --ar-surface: #f7f8fa; --ar-border: #e3e6eb; --ar-border-strong: #c9cfd8;
     --ar-text: #1a2332; --ar-text-muted: #5a6578;
     --ar-accent: #1A2744; --ar-accent-hover: #11192d;
     --ar-danger: #c94545; --ar-danger-hover: #a83838;
     --ar-radius: 8px;
     --ar-font: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  }
-  * { box-sizing: border-box; }
-  body { font-family: var(--ar-font); color: var(--ar-text); margin: 0; padding: 24px; font-size: 15px; line-height: 1.5; }
-  .ar-container { font-family: var(--ar-font); color: var(--ar-text); font-size: 15px; line-height: 1.5; }
-
-  /* No card chrome: the widget sits flat on the survey page (transparent, no gray box) so it reads as native survey content. */
-  .ar-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 22px; }
-  .ar-section + .ar-section { padding-top: 22px; border-top: 1px solid var(--ar-border); } /* divider only between stacked sections (e.g. Credit + Life Insurance) */
-  .ar-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  .ar-section-title { font-size: 16px; font-weight: 700; margin: 0; }
-  .ar-section-count { color: var(--ar-text-muted); font-size: 13px; }
-  .ar-subtitle { font-size: 12px; color: var(--ar-text-muted); margin: 0 0 14px; }
-
-  label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--ar-text); }
-  input[type="text"] {
+  }#bankruptcy-433b-widget#bankruptcy-433b-widget * { box-sizing: border-box; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-container { font-family: var(--ar-font); color: var(--ar-text); font-size: 15px; line-height: 1.5; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-section { background: transparent; border: none; border-radius: 0; padding: 0; margin-bottom: 22px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-section + .ar-section { padding-top: 22px; border-top: 1px solid var(--ar-border); }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-section-title { font-size: 16px; font-weight: 700; margin: 0; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-section-count { color: var(--ar-text-muted); font-size: 13px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-subtitle { font-size: 12px; color: var(--ar-text-muted); margin: 0 0 14px; }#bankruptcy-433b-widget#bankruptcy-433b-widget label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--ar-text); }#bankruptcy-433b-widget#bankruptcy-433b-widget input[type="text"] {
     width: 100%; padding: 9px 12px; font-size: 14px; font-family: var(--ar-font);
     border: 1px solid var(--ar-border-strong); border-radius: var(--ar-radius);
     background: #fff; color: var(--ar-text); transition: border-color .15s, box-shadow .15s;
-  }
-  input:focus { outline: none; border-color: var(--ar-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ar-accent) 22%, transparent); }
-  .ar-amount-wrap { position: relative; }
-  .ar-amount-wrap input { padding-left: 22px; }
-  .ar-amount-wrap::before { content: "$"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ar-text-muted); font-size: 14px; pointer-events: none; }
-
-  button {
+  }#bankruptcy-433b-widget#bankruptcy-433b-widget input:focus { outline: none; border-color: var(--ar-accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ar-accent) 22%, transparent); }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-amount-wrap { position: relative; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-amount-wrap input { padding-left: 22px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-amount-wrap::before { content: "$"; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ar-text-muted); font-size: 14px; pointer-events: none; }#bankruptcy-433b-widget#bankruptcy-433b-widget button {
     font-family: var(--ar-font); font-size: 14px; padding: 9px 16px; border-radius: var(--ar-radius);
     border: 1px solid var(--ar-border-strong); background: #fff; color: var(--ar-text); cursor: pointer; font-weight: 500; transition: background .15s, border-color .15s;
+  }#bankruptcy-433b-widget#bankruptcy-433b-widget button:hover { background: var(--ar-surface); }#bankruptcy-433b-widget#bankruptcy-433b-widget button.ar-primary { background: var(--ar-accent); border-color: var(--ar-accent); color: #fff; }#bankruptcy-433b-widget#bankruptcy-433b-widget button.ar-primary:hover { background: var(--ar-accent-hover); border-color: var(--ar-accent-hover); }#bankruptcy-433b-widget#bankruptcy-433b-widget button.ar-danger-text { background: transparent; border: none; color: var(--ar-danger); padding: 4px 8px; font-size: 13px; }#bankruptcy-433b-widget#bankruptcy-433b-widget button.ar-danger-text:hover { color: var(--ar-danger-hover); background: transparent; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-add-box { background: #fff; border: 1px dashed var(--ar-border-strong); border-radius: var(--ar-radius); padding: 14px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-add-box h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-field-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--ar-col-min, 240px), 1fr)); gap: 14px 16px; margin-bottom: 12px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-field-group > div { display: flex; flex-direction: column; justify-content: flex-end; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-actions-right { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-items-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-item-card { background: #fff; border: 1px solid var(--ar-border); border-radius: var(--ar-radius); padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-item-main { flex: 1; min-width: 0; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-item-name { font-weight: 500; font-size: 14px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-item-meta { font-size: 13px; color: var(--ar-text-muted); margin-top: 2px; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-item-amount { font-weight: 600; font-size: 14px; white-space: nowrap; text-align: right; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-empty { font-size: 13px; color: var(--ar-text-muted); font-style: italic; padding: 6px 0 0; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--ar-border); font-size: 14px; font-weight: 700; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-total .ar-total-val { color: var(--ar-accent); font-size: 16px; font-variant-numeric: tabular-nums; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-warn { background: #fff3cd; border: 1px solid #ffd866; color: #665300; padding: 8px 12px; border-radius: var(--ar-radius); font-size: 13px; margin-bottom: 10px; display: none; }#bankruptcy-433b-widget#bankruptcy-433b-widget .ar-warn.visible { display: block; }`;
+  document.head.appendChild(style);
+
+  // ---- markup ----
+  let container = document.getElementById('bankruptcy-433b-widget') ||
+                  document.querySelector('[data-bankruptcy-433b-widget]');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'bankruptcy-433b-widget';
+    container.setAttribute('data-ar-autoplaced', '1'); // engine may relocate next to its host field (true paste-once)
+    document.body.appendChild(container);
   }
-  button:hover { background: var(--ar-surface); }
-  button.ar-primary { background: var(--ar-accent); border-color: var(--ar-accent); color: #fff; }
-  button.ar-primary:hover { background: var(--ar-accent-hover); border-color: var(--ar-accent-hover); }
-  button.ar-danger-text { background: transparent; border: none; color: var(--ar-danger); padding: 4px 8px; font-size: 13px; }
-  button.ar-danger-text:hover { color: var(--ar-danger-hover); background: transparent; }
+  container.innerHTML = `<div class="ar-container"></div>`;
 
-  .ar-add-box { background: #fff; border: 1px dashed var(--ar-border-strong); border-radius: var(--ar-radius); padding: 14px; }
-  .ar-add-box h4 { margin: 0 0 10px; font-size: 14px; font-weight: 600; }
-  /* Balanced grid, driven by the widget's OWN width (not the viewport): minmax(240px)
-     means a column never shrinks below 240px — auto-fill drops the COUNT 3→2→1 as the
-     box narrows. 900px survey = 3 cols (a 5-field add-box wraps to two rows); tablet = 2;
-     portrait phone (~330px box) = 1 vertical column. So it can't produce a cramped row at
-     any width, and there's no viewport media query to disagree with the container. */
-  .ar-field-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--ar-col-min, 240px), 1fr)); gap: 14px 16px; margin-bottom: 12px; }
-  /* Each cell is a flex column packed to the bottom: inputs bottom-align across a row even
-     when one label wraps to two lines, while every label stays flush above its own input
-     (the label is bound to its field by proximity only, so don't let it detach). */
-  .ar-field-group > div { display: flex; flex-direction: column; justify-content: flex-end; }
-  .ar-actions-right { display: flex; justify-content: flex-end; gap: 8px; margin-top: 4px; }
-
-  .ar-items-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-  .ar-item-card { background: #fff; border: 1px solid var(--ar-border); border-radius: var(--ar-radius); padding: 12px 14px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
-  .ar-item-main { flex: 1; min-width: 0; }
-  .ar-item-name { font-weight: 500; font-size: 14px; }
-  .ar-item-meta { font-size: 13px; color: var(--ar-text-muted); margin-top: 2px; }
-  .ar-item-amount { font-weight: 600; font-size: 14px; white-space: nowrap; text-align: right; }
-
-  .ar-empty { font-size: 13px; color: var(--ar-text-muted); font-style: italic; padding: 6px 0 0; }
-  .ar-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 10px; border-top: 2px solid var(--ar-border); font-size: 14px; font-weight: 700; }
-  .ar-total .ar-total-val { color: var(--ar-accent); font-size: 16px; font-variant-numeric: tabular-nums; }
-  .ar-warn { background: #fff3cd; border: 1px solid #ffd866; color: #665300; padding: 8px 12px; border-radius: var(--ar-radius); font-size: 13px; margin-bottom: 10px; display: none; }
-  .ar-warn.visible { display: block; }
-</style>
-</head>
-<body>
-  <div class="ar-container"></div>
-
-<script>
+  // ---- widget logic ----
+  (function widgetMain() {
 (function () {
   // ============================================================
   // CONFIG — the only thing that differs between 433-A asset widgets.
@@ -100,67 +58,57 @@
   //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
-    "containerId": "investments-433b-widget",
-    "configGlobal": "INVESTMENTS_433B_CONFIG",
+    "containerId": "bankruptcy-433b-widget",
+    "configGlobal": "BANKRUPTCY_433B_CONFIG",
+    "colMin": "320px",
     "sections": [
       {
-        "key": "433b__investments_summary",
-        "id": "aZz6KIIVMQUxRwD943zC",
-        "title": "Investments",
-        "subtitle": "Stocks, bonds, mutual funds, stock options, certificates of deposit, and other business investments (IRS Form 433-B, line 19).",
-        "addLabel": "Add an investment",
-        "addBtn": "Add investment",
-        "gateWarn": "Enter the company name before adding.",
-        "emptyNote": "No investments added yet.",
-        "totalLabel": "Total investments",
-        "totalCol": "equity",
+        "key": "433b_s3__bankruptcy_detail",
+        "id": "cajANacZoQg6Y1DeiR53",
+        "title": "Bankruptcy Filings",
+        "noTotal": true,
+        "subtitle": "Each bankruptcy the business has filed (IRS Form 433-B, line 10).",
+        "addLabel": "Add a bankruptcy filing",
+        "addBtn": "Add filing",
+        "gateWarn": "Enter the date filed before adding.",
+        "emptyNote": "No bankruptcy filings added yet.",
         "columns": [
           {
-            "id": "name",
-            "label": "Company name & address",
+            "id": "datefiled",
+            "label": "Date filed",
             "kind": "text",
-            "ph": "Name, street, city, state, ZIP",
+            "ph": "MM/DD/YYYY",
             "gate": true,
             "role": "name"
           },
           {
-            "id": "phone",
-            "label": "Phone",
+            "id": "datedismissed",
+            "label": "Date dismissed",
             "kind": "text",
-            "ph": "(000) 000-0000",
-            "slabel": "Phone",
+            "ph": "MM/DD/YYYY",
+            "slabel": "Dismissed",
             "role": "meta"
           },
           {
-            "id": "collateral",
-            "label": "Used as collateral on a loan? (Yes/No)",
+            "id": "datedischarged",
+            "label": "Date discharged",
             "kind": "text",
-            "ph": "Yes / No",
-            "slabel": "Collateral"
+            "ph": "MM/DD/YYYY",
+            "slabel": "Discharged"
           },
           {
-            "id": "value",
-            "label": "Current value",
-            "kind": "money",
-            "slabel": "Value"
+            "id": "petition",
+            "label": "Petition no.",
+            "kind": "text",
+            "ph": "Petition number",
+            "slabel": "Petition"
           },
           {
-            "id": "loan",
-            "label": "Loan balance",
-            "kind": "money",
-            "slabel": "Loan"
-          },
-          {
-            "id": "equity",
-            "label": "Equity",
-            "kind": "calc",
-            "sub": [
-              "value",
-              "loan"
-            ],
-            "floor": true,
-            "slabel": "Equity",
-            "role": "amount"
+            "id": "district",
+            "label": "District of filing",
+            "kind": "text",
+            "ph": "Court district",
+            "slabel": "District"
           }
         ]
       }
@@ -493,6 +441,5 @@
     mo.observe(document.documentElement, { childList: true, subtree: true });
   }
 })();
-</script>
-</body>
-</html>
+  })();
+})();

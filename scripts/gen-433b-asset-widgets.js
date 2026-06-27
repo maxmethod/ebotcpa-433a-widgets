@@ -29,7 +29,7 @@ const WIDGETS = {
     config: {
       containerId: 'bank-433b-widget', configGlobal: 'BANK_433B_CONFIG',
       sections: [{
-        key: '433b__bank_accounts_summary', title: 'Bank Accounts',
+        key: '433b__bank_accounts_summary', id: 'Pagy05v49y6KIuOpt0GT', title: 'Bank Accounts',
         subtitle: 'Business checking, savings, money market, and online / stored-value accounts — list every institution (IRS Form 433-B, line 17).',
         addLabel: 'Add a bank / account', addBtn: 'Add account', gateWarn: 'Enter the institution name before adding.', emptyNote: 'No accounts added yet.',
         totalLabel: 'Total cash in banks', totalCol: 'balance',
@@ -48,7 +48,7 @@ const WIDGETS = {
     config: {
       containerId: 'ar-433b-widget', configGlobal: 'AR_433B_CONFIG', colMin: '320px',
       sections: [{
-        key: '433b__accounts_receivable_summary', title: 'Accounts / Notes Receivable',
+        key: '433b__accounts_receivable_summary', id: 'sEeTTyxscC5L31XR7gSh', title: 'Accounts / Notes Receivable',
         subtitle: 'Accounts and notes receivable, including factored receivables and any grant or contract amounts due (IRS Form 433-B, line 18).',
         addLabel: 'Add a receivable', addBtn: 'Add receivable', gateWarn: 'Enter the name before adding.', emptyNote: 'No receivables added yet.',
         totalLabel: 'Outstanding balance', totalCol: 'amount',
@@ -69,7 +69,7 @@ const WIDGETS = {
     config: {
       containerId: 'investments-433b-widget', configGlobal: 'INVESTMENTS_433B_CONFIG',
       sections: [{
-        key: '433b__investments_summary', title: 'Investments',
+        key: '433b__investments_summary', id: 'aZz6KIIVMQUxRwD943zC', title: 'Investments',
         subtitle: 'Stocks, bonds, mutual funds, stock options, certificates of deposit, and other business investments (IRS Form 433-B, line 19).',
         addLabel: 'Add an investment', addBtn: 'Add investment', gateWarn: 'Enter the company name before adding.', emptyNote: 'No investments added yet.',
         totalLabel: 'Total investments', totalCol: 'equity',
@@ -89,7 +89,7 @@ const WIDGETS = {
     config: {
       containerId: 'digital-433b-widget', configGlobal: 'DIGITAL_433B_CONFIG', colMin: '320px',
       sections: [{
-        key: '433b__digital_assets_summary', title: 'Digital Assets',
+        key: '433b__digital_assets_summary', id: 'SNFKj5NSrvbWYXPOmQzV', title: 'Digital Assets',
         subtitle: 'Virtual currency (cryptocurrency), NFTs, and other digital assets held by the business (IRS Form 433-B, line 20). List individuals with access to keys/wallets in the separate field on this page.',
         addLabel: 'Add a digital asset', addBtn: 'Add digital asset', gateWarn: 'Enter the digital asset before adding.', emptyNote: 'No digital assets added yet.',
         totalLabel: 'Total equity of digital assets', totalCol: 'equity',
@@ -111,7 +111,7 @@ const WIDGETS = {
     config: {
       containerId: 'credit-433b-widget', configGlobal: 'CREDIT_433B_CONFIG',
       sections: [{
-        key: '433b__available_credit_summary', title: 'Available Credit',
+        key: '433b__available_credit_summary', id: '4ftsjKqYOo5woTOmcg0Q', title: 'Available Credit',
         subtitle: 'All lines of credit and business-issued credit cards (IRS Form 433-B, line 21).',
         addLabel: 'Add a line of credit', addBtn: 'Add credit line', gateWarn: 'Enter the creditor name before adding.', emptyNote: 'No credit lines added yet.',
         totalLabel: 'Total available credit', totalCol: 'available',
@@ -133,7 +133,7 @@ const WIDGETS = {
     config: {
       containerId: 'realprop-433b-widget', configGlobal: 'REALPROP_433B_CONFIG', colMin: '320px',
       sections: [{
-        key: '433b__real_property_summary', title: 'Real Property',
+        key: '433b__real_property_summary', id: 'C8fC9QDi5qM7jZg2uURo', title: 'Real Property',
         subtitle: 'Real property the business owns, is purchasing, leases, or holds an interest in (IRS Form 433-B, line 22).',
         addLabel: 'Add a property', addBtn: 'Add property', gateWarn: 'Enter a property description before adding.', emptyNote: 'No real property added yet.',
         totalLabel: 'Total equity (FMV − loans)', totalCol: 'equity',
@@ -156,7 +156,7 @@ const WIDGETS = {
     config: {
       containerId: 'vehicle-433b-widget', configGlobal: 'VEHICLE_433B_CONFIG', colMin: '320px',
       sections: [{
-        key: '433b__vehicles_summary', title: 'Vehicles',
+        key: '433b__vehicles_summary', id: 'ZshS8PfRoKE7x5QcCICO', title: 'Vehicles',
         subtitle: 'Company vehicles — cars, trucks, trailers, and equipment vehicles, owned or leased (IRS Form 433-B, line 23).',
         addLabel: 'Add a vehicle', addBtn: 'Add vehicle', gateWarn: 'Enter the year, make & model before adding.', emptyNote: 'No vehicles added yet.',
         totalLabel: 'Total equity (FMV − loans)', totalCol: 'equity',
@@ -185,7 +185,7 @@ const WIDGETS = {
       containerId: 'bizassets-433b-widget', configGlobal: 'BIZASSETS_433B_CONFIG', colMin: '320px',
       sections: [
         {
-          key: '433b__business_equipment_summary', title: 'Business Equipment & Tangible Assets',
+          key: '433b__business_equipment_summary', id: 'mwuIUgGhsoPUuC8eW55H', title: 'Business Equipment & Tangible Assets',
           subtitle: 'Machinery, equipment, merchandise inventory, and other tangible business assets (IRS Form 433-B, lines 24a–24d).',
           addLabel: 'Add equipment / tangible asset', addBtn: 'Add asset', gateWarn: 'Enter an asset description before adding.', emptyNote: 'No business equipment added yet.',
           totalLabel: 'Total equity (FMV − loans)', totalCol: 'equity',
@@ -202,7 +202,7 @@ const WIDGETS = {
           ]
         },
         {
-          key: '433b__intangible_assets_summary', title: 'Intangible Assets',
+          key: '433b__intangible_assets_summary', id: '0sD3HiNLmaWWpWeTVTXe', title: 'Intangible Assets',
           subtitle: 'Intangible assets — licenses, patents, domain names, trademarks, goodwill (IRS Form 433-B, lines 24e–24g).',
           addLabel: 'Add an intangible asset', addBtn: 'Add intangible', gateWarn: 'Enter a description before adding.', emptyNote: 'No intangible assets added yet.',
           totalLabel: 'Total equity', totalCol: 'equity',
@@ -219,7 +219,7 @@ const WIDGETS = {
     config: {
       containerId: 'liabilities-433b-widget', configGlobal: 'LIAB_433B_CONFIG', colMin: '320px',
       sections: [{
-        key: '433b__business_liabilities_summary', title: 'Business Liabilities',
+        key: '433b__business_liabilities_summary', id: 'trZUrE8iXHsPvsfYmleE', title: 'Business Liabilities',
         subtitle: 'Outstanding business liabilities (secured and unsecured) and the monthly payment on each (IRS Form 433-B, line 25).',
         addLabel: 'Add a liability', addBtn: 'Add liability', gateWarn: 'Enter a liability description before adding.', emptyNote: 'No liabilities added yet.',
         totalLabel: 'Total payments', totalCol: 'payment',
@@ -244,7 +244,7 @@ const WIDGETS = {
       containerId: 'payment-433b-widget', configGlobal: 'PAYMENT_433B_CONFIG',
       sections: [
         {
-          key: '433b__payment_processors_summary', title: 'Payment Processors', noTotal: true,
+          key: '433b__payment_processors_summary', id: 'ldKHHNXWbhf6t0PKQuy0', title: 'Payment Processors', noTotal: true,
           subtitle: 'Credit-card payment processors and virtual-currency / internet merchant accounts the business uses (IRS Form 433-B, line 5).',
           addLabel: 'Add a payment processor', addBtn: 'Add processor', gateWarn: 'Enter the processor name before adding.', emptyNote: 'No payment processors added yet.',
           columns: [
@@ -253,7 +253,7 @@ const WIDGETS = {
           ]
         },
         {
-          key: '433b__credit_cards_summary', title: 'Credit Cards Accepted', noTotal: true,
+          key: '433b__credit_cards_summary', id: 'oDNElyzSXpRiwGFMWfzB', title: 'Credit Cards Accepted', noTotal: true,
           subtitle: 'Types of credit cards the business accepts (IRS Form 433-B, line 6).',
           addLabel: 'Add a credit card type', addBtn: 'Add card type', gateWarn: 'Enter the type of card before adding.', emptyNote: 'No credit card types added yet.',
           columns: [
@@ -271,7 +271,7 @@ const WIDGETS = {
     config: {
       containerId: 'personnel-433b-widget', configGlobal: 'PERSONNEL_433B_CONFIG', colMin: '320px',
       sections: [{
-        key: '433b__business_personnel_summary', title: 'Business Personnel', noTotal: true,
+        key: '433b__business_personnel_summary', id: '5YzDLqEDBHYU93oiGORI', title: 'Business Personnel', noTotal: true,
         subtitle: 'Partners, officers, major shareholders, and others responsible for the business (IRS Form 433-B, line 7).',
         addLabel: 'Add a person', addBtn: 'Add person', gateWarn: 'Enter the full name before adding.', emptyNote: 'No personnel added yet.',
         columns: [
@@ -293,7 +293,7 @@ const WIDGETS = {
     config: {
       containerId: 'loans-433b-widget', configGlobal: 'LOANS_433B_CONFIG',
       sections: [{
-        key: '433b__related_party_loans_summary', title: 'Related-Party Loans', noTotal: true,
+        key: '433b__related_party_loans_summary', id: 'Swuynk7vx4JmBZsT44MT', title: 'Related-Party Loans', noTotal: true,
         subtitle: 'Loans the business made to (or received from) officers, partners, shareholders, or other related parties (IRS Form 433-B, line 11).',
         addLabel: 'Add a related-party loan', addBtn: 'Add loan', gateWarn: 'Enter the borrower name before adding.', emptyNote: 'No related-party loans added yet.',
         columns: [
@@ -312,7 +312,7 @@ const WIDGETS = {
     config: {
       containerId: 'transfers-433b-widget', configGlobal: 'TRANSFERS_433B_CONFIG',
       sections: [{
-        key: '433b__asset_transfers_summary', title: 'Asset Transfers', noTotal: true,
+        key: '433b__asset_transfers_summary', id: 'bzYvfKPjrfF3BpeULCCL', title: 'Asset Transfers', noTotal: true,
         subtitle: 'Assets transferred, by or for the business, for less than full value within the past 10 years (IRS Form 433-B, line 12).',
         addLabel: 'Add an asset transfer', addBtn: 'Add transfer', gateWarn: 'Enter the asset transferred before adding.', emptyNote: 'No asset transfers added yet.',
         columns: [
@@ -329,12 +329,52 @@ const WIDGETS = {
     config: {
       containerId: 'affiliations-433b-widget', configGlobal: 'AFFIL_433B_CONFIG',
       sections: [{
-        key: '433b__affiliations_summary', title: 'Affiliations', noTotal: true,
+        key: '433b__affiliations_summary', id: 'gWwgi2YYXfJFXTgU5KX3', title: 'Affiliations', noTotal: true,
         subtitle: 'Other businesses the company is affiliated with — subsidiaries, parent, or sister companies (IRS Form 433-B, line 13).',
         addLabel: 'Add an affiliation', addBtn: 'Add affiliation', gateWarn: 'Enter the related business name before adding.', emptyNote: 'No affiliations added yet.',
         columns: [
           { id: 'name', label: 'Related business name & address', kind: 'text', ph: 'Name, street, city, state, ZIP', gate: true, role: 'name' },
           { id: 'ein', label: 'Related business EIN', kind: 'text', ph: 'XX-XXXXXXX', slabel: 'EIN', role: 'meta' }
+        ]
+      }]
+    }
+  },
+  // ── Section 3 detail repeaters (write the existing _detail LARGE_TEXT fields) ──
+  '433b-lawsuit.html': {
+    title: '433-B — Lawsuit Detail Repeater', container: 'lawsuit-433b-widget', keyComment: '433b_s3__lawsuit_detail',
+    config: {
+      containerId: 'lawsuit-433b-widget', configGlobal: 'LAWSUIT_433B_CONFIG', colMin: '320px',
+      sections: [{
+        key: '433b_s3__lawsuit_detail', id: '78CDwQe1HY2JfEEPvO76', title: 'Lawsuits', noTotal: true,
+        subtitle: 'Each lawsuit the business is a party to (IRS Form 433-B, line 9).',
+        addLabel: 'Add a lawsuit', addBtn: 'Add lawsuit', gateWarn: 'Enter the plaintiff before adding.', emptyNote: 'No lawsuits added yet.',
+        columns: [
+          { id: 'plaintiff', label: 'Plaintiff', kind: 'text', ph: 'Plaintiff name', gate: true, role: 'name' },
+          { id: 'defendant', label: 'Defendant', kind: 'text', ph: 'Defendant name', slabel: 'Defendant', role: 'meta' },
+          { id: 'location', label: 'Location of filing (court)', kind: 'text', ph: 'Court / jurisdiction', slabel: 'Location' },
+          { id: 'represented', label: 'Represented by', kind: 'text', ph: 'Attorney name & firm', slabel: 'Counsel' },
+          { id: 'docket', label: 'Docket / case no.', kind: 'text', ph: 'Case number', slabel: 'Docket' },
+          { id: 'amount', label: 'Amount of suit', kind: 'money', slabel: 'Amount', role: 'amount' },
+          { id: 'completion', label: 'Possible completion date', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'Completion' },
+          { id: 'subject', label: 'Subject of suit', kind: 'text', ph: 'What the suit is about', slabel: 'Subject' }
+        ]
+      }]
+    }
+  },
+  '433b-bankruptcy.html': {
+    title: '433-B — Bankruptcy Detail Repeater', container: 'bankruptcy-433b-widget', keyComment: '433b_s3__bankruptcy_detail',
+    config: {
+      containerId: 'bankruptcy-433b-widget', configGlobal: 'BANKRUPTCY_433B_CONFIG', colMin: '320px',
+      sections: [{
+        key: '433b_s3__bankruptcy_detail', id: 'cajANacZoQg6Y1DeiR53', title: 'Bankruptcy Filings', noTotal: true,
+        subtitle: 'Each bankruptcy the business has filed (IRS Form 433-B, line 10).',
+        addLabel: 'Add a bankruptcy filing', addBtn: 'Add filing', gateWarn: 'Enter the date filed before adding.', emptyNote: 'No bankruptcy filings added yet.',
+        columns: [
+          { id: 'datefiled', label: 'Date filed', kind: 'text', ph: 'MM/DD/YYYY', gate: true, role: 'name' },
+          { id: 'datedismissed', label: 'Date dismissed', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'Dismissed', role: 'meta' },
+          { id: 'datedischarged', label: 'Date discharged', kind: 'text', ph: 'MM/DD/YYYY', slabel: 'Discharged' },
+          { id: 'petition', label: 'Petition no.', kind: 'text', ph: 'Petition number', slabel: 'Petition' },
+          { id: 'district', label: 'District of filing', kind: 'text', ph: 'Court district', slabel: 'District' }
         ]
       }]
     }
