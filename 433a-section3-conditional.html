@@ -1,0 +1,163 @@
+<!-- =====================================================================
+     ebotCPA — 433-A Section 3 conditional reveal (GHL Survey)
+     Survey: link.ebotcpa.com/widget/survey/lQFuqGwaenzxr9JtpNVR · loc iQ5GwlNz7ISfYopdpBUG
+     ---------------------------------------------------------------------
+     Paste this WHOLE block into ONE GHL Survey "Custom Code / HTML" element
+     (anywhere on the survey — every step shares one DOM, so one block drives
+     all of Section 3 wherever you place the questions).
+
+     WHAT IT DOES:
+       Shows each Section 3 "detail" field ONLY when its Yes/No question = Yes.
+       On an explicit "No" it hides the detail AND clears any stale text, so a
+       "No" answer can't carry contradictory detail to the PDF. The lawsuit
+       detail REUSES the existing "Pending Legal Matters" field, so that one is
+       hide-only (never cleared) — clearing it would wipe what the client typed
+       on the step-16 "pending lawsuits/judgements/liens" question.
+       (Recommended: remove that generic step-16 question, since Section 3 now
+       captures it properly as the L7 lawsuit detail.)
+
+     WHY A SCRIPT (not native conditional logic): native GHL conditional logic
+     was flaky on the LPI build; these 11 are independent Yes/No rules, so a
+     single robust script is cleaner and won't drift as fields are reordered.
+
+     HOW IT MATCHES: by GHL's data-q clean key (the input name= is an encrypted
+     blob on surveys). data-q is normalized to letters+digits and matched by
+     endsWith inside the "433a_s3" namespace, so it's robust to GHL rendering
+     " - " as "_-_" vs "__", to the slash in "Trust/Estate", etc., and it can
+     NEVER touch the lookalike *business* bankruptcy/litigation fields (those
+     live outside the 433a_s3 namespace).
+
+     No visible UI of its own. Fields persist natively. Safe to paste once.
+     ===================================================================== -->
+<script>
+(function () {
+  // Each Yes/No trigger + the detail field it reveals, by normalized data-q token
+  // (lowercase, letters+digits only). `null` detail = no follow-up field.
+  var PAIRS = [
+    { trigger: 'incomechangeanticipated', detail: 'incomechangedetail' },      // L6
+    { trigger: 'lawsuit',                 detail: 'pendinglegalmatters', reuse: true }, // L7 reuse existing
+    { trigger: 'bankruptcy',              detail: 'bankruptcydetail' },         // L8
+    { trigger: 'uspassport',              detail: null },                       // L8a
+    { trigger: 'livedabroad6mo',          detail: 'livedabroaddates' },         // L8b
+    { trigger: 'dualcitizenship',         detail: 'dualcitizenshipcountry' },   // L8c
+    { trigger: 'incarcerated',            detail: 'inmatenumber' },             // L9a
+    { trigger: 'trustestatebeneficiary',  detail: 'beneficiarydetail' },        // L9b
+    { trigger: 'trusteeoftrust',          detail: 'trusteedetail' },            // L9c
+    { trigger: 'safedepositbox',          detail: 'safedepositdetail' },        // L10
+    { trigger: 'assettransfer',           detail: 'assettransferdetail' }       // L11
+  ];
+  var NS = '433as3';                       // Section 3 namespace guard
+  var REUSE = { pendinglegalmatters: 1 };  // existing fields allowed outside the NS (hide-only)
+
+  function norm(s) { return String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]/g, ''); }
+
+  var WRAP_SEL = '.form-builder--item, .form-field-wrap, .menu-field-wrap, [class*="form-field-col"], [class*="--item"], .field';
+  function wrapOf(el) { return (el && el.closest && el.closest(WRAP_SEL)) || el; }
+
+  // Elements whose normalized data-q endsWith `token`, scoped to Section 3
+  // (or an allow-listed reused field). Excludes lookalikes elsewhere on the survey.
+  function fieldsFor(token) {
+    var out = [];
+    var nodes = document.querySelectorAll('[data-q]');
+    for (var i = 0; i < nodes.length; i++) {
+      var q = norm(nodes[i].getAttribute('data-q'));
+      if (!q || q.slice(-token.length) !== token) continue;
+      if (q.indexOf(NS) === 0 || REUSE[token]) out.push(nodes[i]);
+    }
+    return out;
+  }
+
+  function inputIn(el) {
+    if (el && el.matches && el.matches('input, textarea, select')) return el;
+    var w = wrapOf(el);
+    return (w && w.querySelector) ? w.querySelector('input, textarea, select') : null;
+  }
+
+  // React-friendly clear (native setter + input/change), only if non-empty.
+  function clearVal(el) {
+    if (!el || !('value' in el) || String(el.value || '') === '') return;
+    var proto = el.tagName === 'TEXTAREA' ? HTMLTextAreaElement.prototype
+              : el.tagName === 'SELECT'   ? HTMLSelectElement.prototype
+              : HTMLInputElement.prototype;
+    var setter = Object.getOwnPropertyDescriptor(proto, 'value').set;
+    setter.call(el, '');
+    el.dispatchEvent(new Event('input',  { bubbles: true }));
+    el.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  function labelAnswer(input) {
+    var lab = input.closest('label');
+    if (!lab && input.id) lab = document.querySelector('label[for="' + input.id + '"]');
+    var t = lab ? norm(lab.textContent) : '';
+    if (t === 'yes' || t.indexOf('yes') === 0) return 'yes';
+    if (t === 'no'  || t.indexOf('no')  === 0) return 'no';
+    return null;
+  }
+
+  // Read a trigger's value -> 'yes' | 'no' | null. Multiple detection strategies
+  // so it works across GHL survey radio renderings.
+  function answerOf(token) {
+    var els = fieldsFor(token);
+    if (!els.length) return null;
+    var wraps = [];
+    els.forEach(function (el) { var w = wrapOf(el); if (wraps.indexOf(w) < 0) wraps.push(w); });
+
+    for (var i = 0; i < wraps.length; i++) {
+      var w = wraps[i];
+      // 1) a checked radio/checkbox: prefer its value, else its label text
+      var chk = w.querySelector('input[type=radio]:checked, input[type=checkbox]:checked');
+      if (chk) {
+        var v = norm(chk.value);
+        if (v === 'yes' || v === 'no') return v;
+        var la = labelAnswer(chk);
+        if (la) return la;
+      }
+      // 3) button-style selected option (no native radio)
+      var sel = w.querySelector('[aria-checked="true"], [class*="selected"], [class*="active"], [class*="checked"]');
+      if (sel) {
+        var st = norm(sel.textContent);
+        var hasYes = st.indexOf('yes') > -1, hasNo = st.indexOf('no') > -1;
+        if (hasYes && !hasNo) return 'yes';
+        if (hasNo && !hasYes) return 'no';
+      }
+    }
+    // 2) a data-q element that itself carries the value (hidden mirror / <select>)
+    for (var j = 0; j < els.length; j++) {
+      if ('value' in els[j]) {
+        var ev = norm(els[j].value);
+        if (ev === 'yes') return 'yes';
+        if (ev === 'no')  return 'no';
+      }
+    }
+    return null;
+  }
+
+  function apply() {
+    for (var i = 0; i < PAIRS.length; i++) {
+      var p = PAIRS[i];
+      if (!p.detail) continue;
+      var detailEls = fieldsFor(p.detail);
+      if (!detailEls.length) continue;
+      var ans = answerOf(p.trigger);
+      var show = ans === 'yes';
+      detailEls.forEach(function (el) {
+        var w = wrapOf(el);
+        if (w && w.style) w.style.display = show ? '' : 'none';
+      });
+      if (ans === 'no' && !p.reuse) {
+        detailEls.forEach(function (el) { clearVal(inputIn(el)); });
+      }
+    }
+  }
+
+  // Run now + on interaction + on a poll (GHL re-renders steps; custom code can
+  // run before fields mount). Cheap idempotent toggling.
+  document.addEventListener('input',  apply, true);
+  document.addEventListener('change', apply, true);
+  document.addEventListener('click',  apply, true);
+  setInterval(apply, 700);
+  apply();
+
+  try { if (window.console && console.info) console.info('[433A S3] conditional reveal active — ' + PAIRS.length + ' questions'); } catch (e) {}
+})();
+</script>
