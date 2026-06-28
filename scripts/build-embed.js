@@ -138,6 +138,17 @@ const WIDGETS = {
   b_affiliations:    { input: '433b-affiliations.html',         output: 'dist/embed-433b-affiliations.js',         containerId: 'affiliations-433b-widget', dataAttr: 'data-affiliations-433b-widget', styleAttr: 'data-affiliations-433b', guard: '__affil433bEmbedLoaded',       label: '433b-affiliations' },
   b_lawsuit:         { input: '433b-lawsuit.html',              output: 'dist/embed-433b-lawsuit.js',              containerId: 'lawsuit-433b-widget',      dataAttr: 'data-lawsuit-433b-widget',      styleAttr: 'data-lawsuit-433b',      guard: '__lawsuit433bEmbedLoaded',     label: '433b-lawsuit' },
   b_bankruptcy:      { input: '433b-bankruptcy.html',           output: 'dist/embed-433b-bankruptcy.js',           containerId: 'bankruptcy-433b-widget',   dataAttr: 'data-bankruptcy-433b-widget',   styleAttr: 'data-bankruptcy-433b',   guard: '__bankruptcy433bEmbedLoaded',  label: '433b-bankruptcy' },
+  // 433-B slide-1 urgency-question card styler (business object). Twin of urgencyCards above.
+  // Finds the business urgency radio group (data-q 433b_-_urgency_level / field id
+  // v6kF4ngIVSjrx19aDw4G) and restyles its three options into selectable cards. No mount div.
+  b_urgencyCards: {
+    input: '433b-urgency-cards.html',
+    output: 'dist/embed-433b-urgency-cards.js',
+    styleAttr: 'data-433b-urgency',
+    guard: '__urgencyCards433bLoaded',
+    label: '433b-urgency-cards',
+    module: true
+  },
   // 433-B Section 5 income/expense/net calc (field-anchored module, no mount div).
   b_incomeExpenseCalc: {
     input: '433b-income-expense-calc.html',

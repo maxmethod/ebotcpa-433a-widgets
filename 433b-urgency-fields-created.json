@@ -1,0 +1,54 @@
+{
+  "locationId": "iQ5GwlNz7ISfYopdpBUG",
+  "objectKey": "business",
+  "folder": "3t6f2NkRurqaRD3ET9om",
+  "purpose": "433-B slide-1 IRS notice / urgency intake (mirror of 433-A contact fields)",
+  "createdAt": "2026-06-28T21:37:30.144Z",
+  "fields": [
+    {
+      "name": "433B - Notice Type/Number",
+      "fieldKey": "business.433b__notice_typenumber",
+      "dataType": "TEXT",
+      "id": "84ChZvYKasc2YIPSao3T",
+      "options": null,
+      "status": "created"
+    },
+    {
+      "name": "433B - Notice Date",
+      "fieldKey": "business.433b__notice_date",
+      "dataType": "DATE",
+      "id": "F4vb39aptZ8uecfynjs2",
+      "options": null,
+      "status": "created"
+    },
+    {
+      "name": "433B - Amount Owed",
+      "fieldKey": "business.433b__amount_owed",
+      "dataType": "MONETORY",
+      "id": "NE6RncfYOnmAMgAMhJcO",
+      "options": null,
+      "status": "created"
+    },
+    {
+      "name": "433B - Urgency Level",
+      "fieldKey": "business.433b__urgency_level",
+      "dataType": "RADIO",
+      "id": "v6kF4ngIVSjrx19aDw4G",
+      "options": [
+        {
+          "key": "critical",
+          "label": "Critical"
+        },
+        {
+          "key": "high_priority",
+          "label": "High Priority"
+        },
+        {
+          "key": "standard",
+          "label": "Standard"
+        }
+      ],
+      "status": "created"
+    }
+  ]
+}
