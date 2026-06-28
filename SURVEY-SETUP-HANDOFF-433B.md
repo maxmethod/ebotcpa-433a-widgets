@@ -12,6 +12,19 @@ Pin to **`@v3.7.0`** once published. jsDelivr base: `cdn.jsdelivr.net/gh/maxmeth
 
 ---
 
+## 📍 Update 2026-06-28 — SLIDE 1 (IRS NOTICE / URGENCY) ADDED
+
+The 433-B now has a styled **slide-1 urgency intake** matching the 433-A pattern, on the **business object** (the placeholders were contact fields — replaced).
+
+- **4 business fields created** (folder `3t6f2NkRurqaRD3ET9om`, via `scripts/create-433b-urgency-fields.js`):
+  `433b__notice_typenumber` (TEXT, id `84ChZvYKasc2YIPSao3T`), `433b__notice_date` (DATE, `F4vb39aptZ8uecfynjs2`), `433b__amount_owed` (MONETORY, `NE6RncfYOnmAMgAMhJcO`), `433b__urgency_level` (RADIO Critical/High Priority/Standard, `v6kF4ngIVSjrx19aDw4G`). ⚠ GHL normalized the RADIO option keys to `critical`/`high_priority`/`standard`.
+- **Widget** `433b-urgency-cards.html` → `dist/embed-433b-urgency-cards.js` (module, no div) — restyles the urgency radio into 3 cards (business notice codes + callback SLAs) + a "Why this matters" callout. **Published `v3.9.0`** (commit `bac2e6d`, jsDelivr live). Embed block is in `GHL-EMBED-SNIPPETS-433B.html` (top).
+- **Rename-proof match:** the widget finds the urgency radio by its option **value set** `{critical, high_priority, standard}` — so the question can be titled anything ("What notice did the business receive?") without breaking the match (data-q + field id are fast-path hints only). This sidesteps the v3.8 data-q-from-display-name trap.
+- **Native slide text** ("START HERE" eyebrow / heading / subtitle) is set in the GHL builder, not the widget.
+- **REMAINING:** Marsh adds the 4 fields to slide 1 of survey `LaE2P0VgtejsdkiIuOEV` (urgency_level as the radio) + pastes the urgency `<script>`.
+
+---
+
 ## 📍 Status (EOD 2026-06-27) & tomorrow
 
 - **Widgets:** ✅ published **`v3.7.0`** (commit `e0423cf`) — jsDelivr serving all embeds.

@@ -8,6 +8,19 @@ Legend: **$**=MONETARY · **txt**=TEXT · **note**=LARGE_TEXT · **Y/N**=RADIO y
 
 ---
 
+## INTAKE — IRS Notice / Urgency (Slide 1, "START HERE")
+🧩 WIDGET `embed-433b-urgency-cards.js` (module, no div — paste once on this slide; @v3.9.0). Styles the `433b__urgency_level` radio into 3 cards + a "Why this matters" callout. Mirrors the 433-A slide-1 urgency intake; **all 4 fields are on the business object.**
+| Field | key | type |
+|---|---|---|
+| Urgency Level (the radio question) | `433b__urgency_level` | RADIO (Critical / High Priority / Standard; GHL keys `critical`/`high_priority`/`standard`) |
+| Notice Type/Number | `433b__notice_typenumber` | txt |
+| Notice Date | `433b__notice_date` | date |
+| Amount Owed (total balance IRS claims) | `433b__amount_owed` | $ |
+
+Eyebrow "START HERE" / heading / subtitle = native GHL slide text (not the widget). The widget matches the radio by its option **value set**, so the displayed question can be named anything.
+
+---
+
 ## SECTION 1 — Business Information
 
 **Slide 1 · Business Identity**

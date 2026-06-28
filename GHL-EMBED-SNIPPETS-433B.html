@@ -1,7 +1,9 @@
 <!-- =====================================================================
      ebotCPA 433-B WIDGETS — GHL EMBED SNIPPETS  (copy-paste build sheet)
      Form 433-B (Rev. 6-2026), Collection Information Statement for Businesses.
-     Pin to the published tag: @v3.8.0.  Base: cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets
+     Latest published tag: @v3.9.0 (adds the slide-1 urgency cards). The asset/calc
+     widgets below are unchanged since @v3.8.0 — either tag serves them; pin them all to
+     @v3.9.0 for consistency. Base: cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets
      (the "433a-widgets" in the repo/URL is cosmetic — one shared engine hosts both forms.)
      =====================================================================
 
@@ -19,6 +21,18 @@
   block IS the visible element that keeps the slide alive + gives the widget its mount.
   Each <div> carries the brand color via data-primary-color. -->
 
+
+<!-- ── SLIDE 1 · IRS NOTICE / URGENCY CARDS · styles the 433b__urgency_level radio ──
+     NO div — paste once on slide 1. Restyles the "What notice did the business receive?"
+     radio (business.433b__urgency_level, options Critical / High Priority / Standard) into
+     three selectable cards (badge + title + business notice codes + callback SLA) and adds
+     a "Why this matters" callout above them. Put these 4 business fields on the slide:
+       433b__urgency_level (RADIO — the question)   433b__notice_typenumber (TEXT)
+       433b__notice_date (DATE)                     433b__amount_owed (MONETORY)
+     The widget finds the radio by its OPTION VALUES {critical/high_priority/standard}, so
+     you can name the question anything (data-q doesn't have to match). The "START HERE"
+     eyebrow / heading / subtitle are native slide text — set them in the builder. -->
+<script src="https://cdn.jsdelivr.net/gh/maxmethod/ebotcpa-433a-widgets@v3.9.0/dist/embed-433b-urgency-cards.js"></script>
 
 <!-- ── L17 · BANK ACCOUNTS · writes 433b__bank_accounts_summary ───────────────── -->
 <div id="bank-433b-widget" data-primary-color="{{custom_values.brand_primary_color}}"></div>
@@ -130,5 +144,5 @@
 
      FALLBACK CDN (if jsDelivr is warming a fresh tag) — swap a <script> for its githack
      twin, do NOT include both:
-       https://rawcdn.githack.com/maxmethod/ebotcpa-433a-widgets/v3.7.0/dist/<file>.js
+       https://rawcdn.githack.com/maxmethod/ebotcpa-433a-widgets/v3.9.0/dist/<file>.js
      ───────────────────────────────────────────────────────────────────────────── -->
