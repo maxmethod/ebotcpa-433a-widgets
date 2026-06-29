@@ -17,7 +17,7 @@
   :root {
     --ar-bg: #ffffff; --ar-surface: #f7f8fa; --ar-border: #e3e6eb; --ar-border-strong: #c9cfd8;
     --ar-text: #1a2332; --ar-text-muted: #5a6578;
-    --ar-accent: #1A2744; --ar-accent-hover: #11192d;
+    --ar-accent: #5E52A3; --ar-accent-hover: #4B4183; /* ebotCPA brand purple (hardcoded — the {{custom_values.brand_primary_color}} merge tag resolves empty on landing-page embeds) */
     --ar-danger: #c94545; --ar-danger-hover: #a83838;
     --ar-radius: 8px;
     --ar-font: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -475,20 +475,29 @@
     var d = function (v) { return Math.max(0, Math.round(v * (1 - amount))).toString(16).padStart(2, '0'); };
     return '#' + d(r) + d(g) + d(b);
   }
+  // A fully-transparent color (alpha 0) must NEVER be used as the accent. GHL footer/submit
+  // buttons render with backgroundColor rgba(255,255,255,0); the old code scraped that as the
+  // brand color and painted the Add buttons see-through. We no longer scrape GHL chrome at all.
+  function isTransparent(v) {
+    if (!v) return true;
+    var s = String(v).trim().toLowerCase();
+    if (s === 'transparent') return true;
+    var rgba = s.match(/^rgba?\(\s*\d+[\s,]+\d+[\s,]+\d+[\s,/]+([\d.]+)\s*\)$/);
+    if (rgba && parseFloat(rgba[1]) === 0) return true;
+    if (/^#([0-9a-f]{6})00$/.test(s) || /^#([0-9a-f]{3})0$/.test(s)) return true; // #rrggbb00 / #rgb0
+    return false;
+  }
   function applyPrimaryColor() {
     if (!widgetEl) return;
+    // Use an EXPLICIT valid color only — a runtime override (window config) or a
+    // data-primary-color that actually resolved to a color. Otherwise keep the hardcoded brand
+    // default from :root (--ar-accent). We deliberately do NOT fall back to scraping the GHL
+    // footer/submit button: on a landing-page embed its background is transparent, which used to
+    // leak through and make the buttons invisible.
     var color = null;
     if (isValidColor(OVR.primaryColor)) color = OVR.primaryColor;
     else if (widgetEl.dataset && isValidColor(widgetEl.dataset.primaryColor)) color = widgetEl.dataset.primaryColor;
-    else {
-      var fb = document.querySelector('button[type="submit"]');
-      if (fb && isValidColor(fb.style.backgroundColor)) color = fb.style.backgroundColor;
-      if (!color) {
-        var sb = document.querySelector('.ghl-footer-next, .ghl-footer-previous, .ghl-footer .ghl-btn');
-        if (sb) { var cs = getComputedStyle(sb), skip = ['rgb(0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgb(96, 113, 121)', 'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)', 'transparent', '']; if (cs.backgroundColor && skip.indexOf(cs.backgroundColor) === -1) color = cs.backgroundColor; else if (isValidColor(cs.color) && skip.indexOf(cs.color) === -1) color = cs.color; }
-      }
-    }
-    if (!color) return;
+    if (!color || isTransparent(color)) return; // keep the hardcoded CSS default (brand purple)
     var hex8 = color.match(/^#([0-9a-f]{8})$/i); if (hex8) color = '#' + hex8[1].substring(0, 6);
     widgetEl.style.setProperty('--ar-accent', color);
     widgetEl.style.setProperty('--ar-accent-hover', darken(color, 0.14));
@@ -520,13 +529,28 @@
     if (t) flushPending();
   }, true);
 
+  // Un-hide the widget's OWN Custom-Code element wrapper. GHL sometimes bakes its d-none
+  // (display:none !important) class onto a Custom-Code element's .form-builder--item — observed
+  // when an element is duplicated from a conditionally-hidden one — which hides the whole widget
+  // even though it rendered perfectly inside. This is a STATIC publish-time state (present at
+  // load, with no conditional-logic rule to ever clear it), so we strip it during the bounded
+  // boot poll only. That fixes the stuck-hidden case without fighting genuine conditional-logic
+  // gating (which toggles later, after the user answers — and which, on this survey, gates via
+  // its own mechanism, not d-none on the Custom-Code wrapper).
+  function unhideSelf() {
+    if (!widgetEl) return;
+    var wrap = widgetEl.closest && widgetEl.closest('.form-builder--item');
+    if (wrap && wrap.classList && wrap.classList.contains('d-none')) wrap.classList.remove('d-none');
+  }
+
   // ---------- boot ----------
   CONFIG.sections.forEach(buildSection);
   reconcileFallbacks();
   applyPrimaryColor();
   hideHostFields();
+  unhideSelf();
   var tries = 0, layoutWarned = CONFIG.sections.length < 2;
-  var timer = setInterval(function () { tries++; placeWidget(); if (!layoutWarned) layoutWarned = warnSplitSections(); applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
+  var timer = setInterval(function () { tries++; placeWidget(); unhideSelf(); if (!layoutWarned) layoutWarned = warnSplitSections(); applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
 
   // Durable, time-UNBOUNDED placement. The 300ms poll above only runs ~12s — plenty when
   // GHL has all steps in the DOM at load (every widget places at once). But if GHL mounts a

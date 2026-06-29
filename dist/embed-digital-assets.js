@@ -18,7 +18,7 @@
   style.textContent = `:root {
     --ar-bg: #ffffff; --ar-surface: #f7f8fa; --ar-border: #e3e6eb; --ar-border-strong: #c9cfd8;
     --ar-text: #1a2332; --ar-text-muted: #5a6578;
-    --ar-accent: #1A2744; --ar-accent-hover: #11192d;
+    --ar-accent: #5E52A3; --ar-accent-hover: #4B4183; 
     --ar-danger: #c94545; --ar-danger-hover: #a83838;
     --ar-radius: 8px;
     --ar-font: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -54,6 +54,8 @@
   //   column.role: 'name' | 'meta' | 'amount'  (drives the summary card)
   //   column.slabel: label used in the saved pipe summary
   //   section.totalCol: the money/calc column summed for the total line
+  //   section.noTotal: true -> omit the trailing total line (pure-list classes:
+  //                    personnel, processors, credit cards, affiliations, etc. — no $ total)
   // ============================================================
   var CONFIG = {
     "containerId": "digital-assets-433a-widget",
@@ -206,10 +208,24 @@
   // survey's name= is an encrypted blob. Match the host by the clean key AND its "_-_" form,
   // across name= and data-q. WITHOUT this the widget can't find its host on a real survey:
   // it appends to <body>, never hides the native field, and never writes the summary back.
+  // Field-id match (MOST robust, preferred): GHL renders the host field as
+  // <textarea name="<fieldId>" id="<fieldId>">, and the survey data-q is derived from the
+  // field's DISPLAY NAME — NOT its fieldKey. So a friendly rename ("Business Bank Accounts")
+  // makes data-q "433b_-_business_bank_accounts" and key/data-q matching MISSES the host.
+  // When CONFIG supplies the GHL field id per section (`id`), match on it first (rename-proof,
+  // exactly how the income/expense calc binds). Falls back to clean-key/data-q forms when no
+  // id is given (so 433-A configs without `id` behave unchanged).
+  function idForKey(key) {
+    try { for (var i = 0; i < CONFIG.sections.length; i++) { var s = CONFIG.sections[i]; if (s.key === key && s.id) return s.id; } } catch (e) {}
+    return null;
+  }
   function hostSel(key, live) {
     var suf = live ? ':not([data-ar-fallback])' : '';
     var dash = key.replace(/__/g, '_-_');
-    var sel = ['[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf];
+    var sel = [];
+    var fid = idForKey(key);
+    if (fid) sel.push('[name="' + fid + '"]' + suf, '[id="' + fid + '"]' + suf);
+    sel.push('[data-q="' + key + '"]' + suf, '[name="' + key + '"]' + suf);
     if (dash !== key) sel.push('[data-q="' + dash + '"]' + suf);
     return sel.join(', ');
   }
@@ -253,7 +269,7 @@
       });
       return parts.join(' | ');
     });
-    lines.push('— ' + (sec.totalLabel || 'Total') + ': ' + money(totalOf(sec)));
+    if (!sec.noTotal) lines.push('— ' + (sec.totalLabel || 'Total') + ': ' + money(totalOf(sec))); // noTotal: pure-list classes have no meaningful $ total line
     return lines.join('\n');
   }
 
@@ -275,7 +291,7 @@
     sec._els.list.querySelectorAll('[data-rm]').forEach(function (b) {
       b.onclick = function () { sec._state = sec._state.filter(function (r) { return r._id !== b.dataset.rm; }); render(sec, true); };
     });
-    if (sec._els.total) { sec._els.total.style.display = n > 0 ? 'flex' : 'none'; sec._els.totalVal.textContent = money(totalOf(sec)); }
+    if (sec._els.total) { sec._els.total.style.display = (!sec.noTotal && n > 0) ? 'flex' : 'none'; if (!sec.noTotal) sec._els.totalVal.textContent = money(totalOf(sec)); } // noTotal: never show or compute a total (totalCol may be absent)
     sec._els.box.style.display = n >= MAX ? 'none' : 'block';
     if (write) setAll(sec.key, buildSummary(sec));
   }
@@ -363,20 +379,29 @@
     var d = function (v) { return Math.max(0, Math.round(v * (1 - amount))).toString(16).padStart(2, '0'); };
     return '#' + d(r) + d(g) + d(b);
   }
+  // A fully-transparent color (alpha 0) must NEVER be used as the accent. GHL footer/submit
+  // buttons render with backgroundColor rgba(255,255,255,0); the old code scraped that as the
+  // brand color and painted the Add buttons see-through. We no longer scrape GHL chrome at all.
+  function isTransparent(v) {
+    if (!v) return true;
+    var s = String(v).trim().toLowerCase();
+    if (s === 'transparent') return true;
+    var rgba = s.match(/^rgba?\(\s*\d+[\s,]+\d+[\s,]+\d+[\s,/]+([\d.]+)\s*\)$/);
+    if (rgba && parseFloat(rgba[1]) === 0) return true;
+    if (/^#([0-9a-f]{6})00$/.test(s) || /^#([0-9a-f]{3})0$/.test(s)) return true; // #rrggbb00 / #rgb0
+    return false;
+  }
   function applyPrimaryColor() {
     if (!widgetEl) return;
+    // Use an EXPLICIT valid color only — a runtime override (window config) or a
+    // data-primary-color that actually resolved to a color. Otherwise keep the hardcoded brand
+    // default from :root (--ar-accent). We deliberately do NOT fall back to scraping the GHL
+    // footer/submit button: on a landing-page embed its background is transparent, which used to
+    // leak through and make the buttons invisible.
     var color = null;
     if (isValidColor(OVR.primaryColor)) color = OVR.primaryColor;
     else if (widgetEl.dataset && isValidColor(widgetEl.dataset.primaryColor)) color = widgetEl.dataset.primaryColor;
-    else {
-      var fb = document.querySelector('button[type="submit"]');
-      if (fb && isValidColor(fb.style.backgroundColor)) color = fb.style.backgroundColor;
-      if (!color) {
-        var sb = document.querySelector('.ghl-footer-next, .ghl-footer-previous, .ghl-footer .ghl-btn');
-        if (sb) { var cs = getComputedStyle(sb), skip = ['rgb(0, 0, 0)', 'rgba(0, 0, 0, 0)', 'rgb(96, 113, 121)', 'rgb(255, 255, 255)', 'rgba(255, 255, 255, 1)', 'transparent', '']; if (cs.backgroundColor && skip.indexOf(cs.backgroundColor) === -1) color = cs.backgroundColor; else if (isValidColor(cs.color) && skip.indexOf(cs.color) === -1) color = cs.color; }
-      }
-    }
-    if (!color) return;
+    if (!color || isTransparent(color)) return; // keep the hardcoded CSS default (brand purple)
     var hex8 = color.match(/^#([0-9a-f]{8})$/i); if (hex8) color = '#' + hex8[1].substring(0, 6);
     widgetEl.style.setProperty('--ar-accent', color);
     widgetEl.style.setProperty('--ar-accent-hover', darken(color, 0.14));
@@ -408,13 +433,28 @@
     if (t) flushPending();
   }, true);
 
+  // Un-hide the widget's OWN Custom-Code element wrapper. GHL sometimes bakes its d-none
+  // (display:none !important) class onto a Custom-Code element's .form-builder--item — observed
+  // when an element is duplicated from a conditionally-hidden one — which hides the whole widget
+  // even though it rendered perfectly inside. This is a STATIC publish-time state (present at
+  // load, with no conditional-logic rule to ever clear it), so we strip it during the bounded
+  // boot poll only. That fixes the stuck-hidden case without fighting genuine conditional-logic
+  // gating (which toggles later, after the user answers — and which, on this survey, gates via
+  // its own mechanism, not d-none on the Custom-Code wrapper).
+  function unhideSelf() {
+    if (!widgetEl) return;
+    var wrap = widgetEl.closest && widgetEl.closest('.form-builder--item');
+    if (wrap && wrap.classList && wrap.classList.contains('d-none')) wrap.classList.remove('d-none');
+  }
+
   // ---------- boot ----------
   CONFIG.sections.forEach(buildSection);
   reconcileFallbacks();
   applyPrimaryColor();
   hideHostFields();
+  unhideSelf();
   var tries = 0, layoutWarned = CONFIG.sections.length < 2;
-  var timer = setInterval(function () { tries++; placeWidget(); if (!layoutWarned) layoutWarned = warnSplitSections(); applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
+  var timer = setInterval(function () { tries++; placeWidget(); unhideSelf(); if (!layoutWarned) layoutWarned = warnSplitSections(); applyPrimaryColor(); hideHostFields(); reconcileFallbacks(); if (tries > 40) clearInterval(timer); }, 300);
 
   // Durable, time-UNBOUNDED placement. The 300ms poll above only runs ~12s — plenty when
   // GHL has all steps in the DOM at load (every widget places at once). But if GHL mounts a
